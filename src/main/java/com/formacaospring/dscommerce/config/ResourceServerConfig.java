@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -79,7 +80,7 @@ public class ResourceServerConfig {
 	}
 
 	@Bean
-	FilterRegistrationBean<CorsFilter> corsFilter() {
+	FilterRegistrationBean<CorsFilter> processCorsFilter() {
 		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(
 				new CorsFilter(corsConfigurationSource()));
 		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
