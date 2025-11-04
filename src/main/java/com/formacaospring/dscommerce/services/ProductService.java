@@ -14,8 +14,10 @@ import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundExcepti
 
 import jakarta.persistence.EntityNotFoundException;
 
+import com.formacaospring.dscommerce.dto.CategoryDTO;
 import com.formacaospring.dscommerce.dto.ProductDTO;
 import com.formacaospring.dscommerce.dto.ProductMinDTO;
+import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 
 @Service
@@ -77,6 +79,12 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+        entity.getCategories().clear();
+        for(CategoryDTO catDto : dto.getCategories()){
+            Category cat = new Category();
+            cat.setId(catDto.getId());
+            entity.getCategories().add(cat);
+        }
     }
 
 }
