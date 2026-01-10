@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,6 +22,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
     @InjectMocks
@@ -34,24 +35,19 @@ public class ProductServiceTests {
     private long existingProductId, nonExistingProductId;
     private String productName;
     private Product product;
-
     private PageImpl<Product> page;
 
     @BeforeEach
-    void setU() throws Exception{
+    void setUp() throws Exception{
         existingProductId = 1L;
         nonExistingProductId = 2L;
         productName = "PS5";
-
         product = ProductFactory.createProduct(productName);
-
         page = new PageImpl<>(List.of(product));
 
+        Mockito.when(repository.searchByName(any(), (Pageable)any())).thenReturn(page);
         Mockito.when(repository.findById(existingProductId)).thenReturn(Optional.of(product));
         Mockito.when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
-
-        Mockito.when(repository.findAll((Pageable) ArgumentMatchers.any())).thenReturn(page);
-
     }
 
     @Test
@@ -73,9 +69,11 @@ public class ProductServiceTests {
     @Test
     public void findAllShouldPagedReturnProductMinDTO() {
         Pageable pageable = PageRequest.of(0, 12);
-        String name = "PS5";
-        Page<ProductMinDTO> result = service.findAll(name, pageable);
+
+        Page<ProductMinDTO> result = service.findAll(productName, pageable);
 
         Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.getSize(), 1);
+        Assertions.assertEquals(result.iterator().next().getName(), productName);
     }
 }
