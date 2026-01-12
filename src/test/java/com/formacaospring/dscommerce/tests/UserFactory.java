@@ -1,9 +1,10 @@
 package com.formacaospring.dscommerce.tests;
 
+import java.time.LocalDate;
+
+import com.formacaospring.dscommerce.dto.UserDTO;
 import com.formacaospring.dscommerce.entities.Role;
 import com.formacaospring.dscommerce.entities.User;
-
-import java.time.LocalDate;
 
 public class UserFactory {
     public static User createClientUser(){
@@ -32,5 +33,9 @@ public class UserFactory {
                 LocalDate.parse("2001-07-25"),"$2a$10$RsB5BPHXdY2eRotNKWkhv.Wg2wshgsVVNi6OQNSmrbRUGEUd8bMtS");
         user.addRole(new Role(2L, "ROLE_ADMIN"));
         return user;
+    }
+    
+    public static UserDTO createClientUserDTO() {
+    	return new UserDTO(createClientUser());
     }
 }
