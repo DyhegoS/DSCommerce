@@ -129,8 +129,10 @@
                         <exclude>com/formacaospring/dscommerce/config/**</exclude>
                         <exclude>com/formacaospring/dscommerce/entities/**</exclude>
                         <exclude>com/formacaospring/dscommerce/dto/**</exclude>
+                        <exclude>com/formacaospring/dscommerce/controllers/**</exclude>
                         <exclude>com/formacaospring/dscommerce/controllers/handlers/**</exclude>
                         <exclude>com/formacaospring/dscommerce/services/exceptions/**</exclude>
+                        <exclude>com/formacaospring/dscommerce/util/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>
