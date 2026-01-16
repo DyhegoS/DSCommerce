@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.tests.ProductFactory;
 import com.formacaospring.dscommerce.tests.TokenUtil;
 
 import jakarta.transaction.Transactional;
@@ -35,13 +37,14 @@ public class ProductControllerIT {
 	private TokenUtil tokenUtil;
 	
 	private String username, password, bearerToken, invalidToken;
+	private Product product;
 	
 	@BeforeEach
 	void setUp() throws Exception{
 		username = "alex@gmail.com";
 		password = "123456";
 		bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
-		invalidToken = bearerToken + "xpto";
+		invalidToken = bearerToken + "xpto";	
 	}
 	
 	@Test
@@ -57,12 +60,14 @@ public class ProductControllerIT {
 	
 	@Test
 	public void insertShouldInsertProductWhenAdminLoggedAndValidData() throws Exception {
+		product = ProductFactory.createProduct();
+		product.setId(null);
+		ProductDTO productDTO = new ProductDTO(product);
 		
-		ProductDTO dto = new ProductDTO(null, "Xbox", "blablabla", 2.00, "blablabla");
-		String jsonBody = objectMapper.writeValueAsString(dto);
+		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
 		ResultActions result = 
-				mockMvc.perform(post("/product")
+				mockMvc.perform(post("/products")
 						.header("Authorization", "Bearer " + bearerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
