@@ -36,15 +36,18 @@ public class ProductControllerIT {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
-	private String username, password, bearerToken, invalidToken;
+	private String usernameAdmin, usernameClient, passwordAdmin, passwordClient, tokenAdmin, tokenClient, invalidToken;
 	private Product product;
 	
 	@BeforeEach
 	void setUp() throws Exception{
-		username = "alex@gmail.com";
-		password = "123456";
-		bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
-		invalidToken = bearerToken + "xpto";	
+		usernameAdmin = "alex@gmail.com";
+		passwordAdmin = "123456";
+		usernameClient = "maria@gmail.com";
+		passwordClient = "123456";
+		tokenAdmin = tokenUtil.obtainAccessToken(mockMvc, usernameAdmin, passwordAdmin);
+		tokenClient = tokenUtil.obtainAccessToken(mockMvc, usernameClient, passwordClient);
+		invalidToken = tokenAdmin + "xpto";	
 	}
 	
 	@Test
@@ -68,13 +71,30 @@ public class ProductControllerIT {
 		
 		ResultActions result = 
 				mockMvc.perform(post("/products")
-						.header("Authorization", "Bearer " + bearerToken)
+						.header("Authorization", "Bearer " + tokenAdmin)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
 		
-		result.andExpect(status().isCreated());
-				
+		result.andExpect(status().isCreated());			
+	}
+	
+	@Test
+	public void insertShouldThrow422WithCustomMessagesWhenAdminLoggedAndNameInvalid() throws Exception{
+		product = ProductFactory.createProduct();
+		product.setId(null);
+		product.setName("  ");
+		ProductDTO productDTO = new ProductDTO(product);
+		
+		String jsonBody = objectMapper.writeValueAsString(productDTO);
+		
+		ResultActions result = mockMvc.perform(post("/products")
+				.header("Authorization", "Bearer " + tokenAdmin)
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isUnprocessableEntity());		
 	}
 	
 	
