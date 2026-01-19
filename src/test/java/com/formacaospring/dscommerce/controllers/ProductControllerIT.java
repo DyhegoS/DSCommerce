@@ -1,11 +1,11 @@
 package com.formacaospring.dscommerce.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.entities.Product;
-import com.formacaospring.dscommerce.tests.ProductFactory;
-import com.formacaospring.dscommerce.tests.TokenUtil;
-import jakarta.transaction.Transactional;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.entities.Order;
+import com.formacaospring.dscommerce.entities.OrderItem;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.tests.OrderFactory;
+import com.formacaospring.dscommerce.tests.ProductFactory;
+import com.formacaospring.dscommerce.tests.TokenUtil;
+import com.formacaospring.dscommerce.tests.UserFactory;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,36 +42,51 @@ public class ProductControllerIT {
 	private TokenUtil tokenUtil;
 
     private long existingProductId, nonExistingProductId, dependentProductId;
-	private String usernameAdmin, usernameClient, passwordAdmin, passwordClient, tokenAdmin, tokenClient, invalidToken;
+	private String usernameAdmin, usernameClient, passwordAdmin, passwordClient, tokenAdmin, tokenClient, invalidToken, productName;
 	private Product product;
+	private Order order;
+	private User client;
 	
 	@BeforeEach
 	void setUp() throws Exception{
         existingProductId = 1L;
         nonExistingProductId = 1000L;
         dependentProductId = 1L;
+        productName = "Macbook";
 		usernameAdmin = "alex@gmail.com";
 		passwordAdmin = "123456";
 		usernameClient = "maria@gmail.com";
 		passwordClient = "123456";
+		client = UserFactory.createClientUser();
 		tokenAdmin = tokenUtil.obtainAccessToken(mockMvc, usernameAdmin, passwordAdmin);
 		tokenClient = tokenUtil.obtainAccessToken(mockMvc, usernameClient, passwordClient);
 		invalidToken = tokenAdmin + "xpto";	
 	}
 	
 	@Test
-	public void findAllShouldReturnProductMinDTOPagedByName() throws Exception{
-		ResultActions result = mockMvc.perform(get("/products?name=mac")
+	public void findAllShouldReturnPageWhenNameParamIsEmpty() throws Exception{
+		ResultActions result = mockMvc.perform(get("/products")
 				.accept(MediaType.APPLICATION_JSON));		
 		result.andExpect(status().isOk());
-		result.andExpect(jsonPath("$.content[0].id").value(3));
+		result.andExpect(jsonPath("$.content[0].id").value(1L));
+		result.andExpect(jsonPath("$.content[0].name").value("The Lord of the Rings"));
+		result.andExpect(jsonPath("$.content[0].price").value(90.5));
+		result.andExpect(jsonPath("$.content[0].imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg"));			
+	}
+	
+	@Test
+	public void findAllShouldReturnPageWhenNameParamIsNotEmpty() throws Exception{
+		ResultActions result = mockMvc.perform(get("/products?name={productName}", productName)
+				.accept(MediaType.APPLICATION_JSON));		
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.content[0].id").value(3L));
 		result.andExpect(jsonPath("$.content[0].name").value("Macbook Pro"));
 		result.andExpect(jsonPath("$.content[0].price").value(1250.0));
 		result.andExpect(jsonPath("$.content[0].imgUrl").value("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg"));			
 	}
 	
 	@Test
-	public void insertShouldInsertProductWhenAdminLoggedAndValidData() throws Exception {
+	public void insertShouldInsertProductDTOCreatedWhenAdminLogged() throws Exception {
 		product = ProductFactory.createProduct();
 		product.setId(null);
 		ProductDTO productDTO = new ProductDTO(product);
@@ -243,6 +266,11 @@ public class ProductControllerIT {
 
     @Test
     public void deleteShouldThrow400WhenIdIsDependentAndAdminLogged() throws Exception{
+    	order = OrderFactory.createOrder(client);
+    	for(OrderItem i : order.getItems()) {
+    		dependentProductId = i.getProduct().getId();
+    	}
+        
         ResultActions result =
                 mockMvc.perform(delete("/products/{id}", dependentProductId)
                         .header("Authorization", "Bearer " + tokenAdmin)
