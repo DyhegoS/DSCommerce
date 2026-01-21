@@ -45,7 +45,6 @@ public class UserServiceTests {
         existingUsername = "ana@gmail.com";
         nonExistingUsername = "mike@gmail.com";
         user = UserFactory.createCustomClientUser(1L, existingUsername);
-        userDTO = UserFactory.createClientUserDTO();
         userDetails = UserDetailsFactory.createCustomAdminUser(existingUsername);
 
         Mockito.when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
