@@ -1,7 +1,7 @@
 package com.formacaospring.dscommerce.entities;
 
 public enum OrderStatus {
-    AWAITING_APPROVAL,
+    WAITING_APPROVAL,
     SEPARATION,
     READY_DELIVERY,
     SHIPPED,

@@ -38,6 +38,9 @@ public class User implements UserDetails{
 	@OneToMany(mappedBy = "user")
 	List<Order> orders = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<Client> clients = new HashSet<>();
+
 	@ManyToMany
     @JoinTable(name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -87,7 +90,11 @@ public class User implements UserDetails{
 		return orders;
 	}
 
-	public Set<Role> getRoles() {
+    public Set<Client> getClients() {
+        return clients;
+    }
+
+    public Set<Role> getRoles() {
 		return roles;
 	}
 

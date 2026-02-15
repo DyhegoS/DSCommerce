@@ -20,10 +20,10 @@ public class Client {
     private String phone;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "id.order")
+    @OneToMany(mappedBy = "client")
     private List<Order> orders = new ArrayList<>();
 
     public Client(){

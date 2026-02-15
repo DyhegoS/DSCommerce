@@ -1,22 +1,34 @@
 package com.formacaospring.dscommerce.dto;
 
-import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.entities.Client;
 
 public class ClientDTO {
     private Long id;
     private String name;
+    private String email;
+    private String cnpj;
+    private String address;
+    private String phone;
 
     public ClientDTO(){
     }
 
-    public ClientDTO(Long id, String name) {
+    public ClientDTO(Long id, String name, String email, String cnpj, String address, String phone) {
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.cnpj = cnpj;
+        this.address = address;
+        this.phone = phone;
     }
 
-    public ClientDTO(User entity){
+    public ClientDTO(Client entity){
         id = entity.getId();
-        name = entity.getUsername();
+        name = entity.getName();
+        email = entity.getEmail();
+        cnpj = entity.getCnpj();
+        address = entity.getAddress();
+        phone = entity.getPhone();
     }
 
     public Long getId() {
@@ -25,5 +37,21 @@ public class ClientDTO {
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

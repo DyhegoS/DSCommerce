@@ -39,15 +39,20 @@ public class Order {
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     public Order(){
     }
 
-    public Order(Long id, Instant moment, OrderStatus status, User user, Payment payment) {
+    public Order(Long id, Instant moment, OrderStatus status, User user, Payment payment, Client client) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.user = user;
         this.payment = payment;
+        this.client = client;
     }
 
     public Long getId() {
@@ -88,6 +93,14 @@ public class Order {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Set<OrderItem> getItems() {

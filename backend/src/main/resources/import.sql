@@ -60,6 +60,12 @@ INSERT INTO tb_user (username, email, password) VALUES ('Alex Green', 'alex@gmai
 INSERT INTO tb_user (username, email, password) VALUES ('admin', 'admin@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
 INSERT INTO tb_user (username, email, password) VALUES ('Jailson Mendes', 'jaja24@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
 
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Sinco Engenharia', 'contato@sincoengenharia.com', '36555444000152', 'Rua Fulano de Tal, 123', '+551123459876', 4);
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Terabyte Informática', 'contato@terabyte.com', '36555777000153', 'Rua Fulano de Tal, 1555', '+551123458886', 4);
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Odebrecht', 'contato@odebrecht.com', '36222444000152', 'Rua Fulano Ciclano, 1333', '+554427759876', 4);
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Level 5', 'contato@level5.com', '44555444000100', 'Rua Beutrano de Tal, 123', '+551199999876', 4);
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Microsoft', 'contato@outlook.com', '36555444000234', 'Av. Vale do Silicio, 1111', '+552223459888', 4);
+
 INSERT INTO tb_role (authority) VALUES ('ROLE_USER_STOCK');
 INSERT INTO tb_role (authority) VALUES ('ROLE_ADMIN');
 INSERT INTO tb_role (authority) VALUES ('ROLE_SELLER');
@@ -69,14 +75,14 @@ INSERT INTO tb_user_role (user_id, role_id) VALUES (2, 3);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 2);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (4, 3);
 
-INSERT INTO tb_order (moment, status, user_id) VALUES (TIMESTAMP WITH TIME ZONE '2022-07-25T13:00:00Z', 1, 1);
-INSERT INTO tb_order (moment, status, user_id) VALUES (TIMESTAMP WITH TIME ZONE '2022-07-29T15:50:00Z', 3, 2);
-INSERT INTO tb_order (moment, status, user_id) VALUES (TIMESTAMP WITH TIME ZONE '2022-08-03T14:20:00Z', 0, 1);
+INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-25T13:00:00Z', 1, 4, 1);
+INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-15T15:50:00Z', 3, 4, 2);
+INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-03T14:20:00Z', 0, 4, 3);
 
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (1, 1, 2, 90.5);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (1, 3, 1, 1250.0);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (2, 3, 1, 1250.0);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (3, 1, 1, 90.5);
 
-INSERT INTO tb_payment (order_id, moment) VALUES (1, TIMESTAMP WITH TIME ZONE '2022-07-25T15:00:00Z');
-INSERT INTO tb_payment (order_id, moment) VALUES (2, TIMESTAMP WITH TIME ZONE '2022-07-30T11:00:00Z');
+INSERT INTO tb_payment (order_id, moment) VALUES (1, TIMESTAMP WITH TIME ZONE '2026-01-25T15:00:00Z');
+INSERT INTO tb_payment (order_id, moment) VALUES (2, TIMESTAMP WITH TIME ZONE '2026-01-30T11:00:00Z');

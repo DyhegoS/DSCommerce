@@ -49,7 +49,7 @@ public class OrderService {
         Order order = new Order();
 
         order.setMoment(Instant.now());
-        order.setStatus(OrderStatus.WAITING_PAYMENT);
+        order.setStatus(OrderStatus.WAITING_APPROVAL);
 
         User user = userService.authenticated();
         order.setUser(user);
