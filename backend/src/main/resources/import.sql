@@ -64,7 +64,7 @@ INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Sinc
 INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Terabyte Informática', 'contato@terabyte.com', '36555777000153', 'Rua Fulano de Tal, 1555', '+551123458886', 4);
 INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Odebrecht', 'contato@odebrecht.com', '36222444000152', 'Rua Fulano Ciclano, 1333', '+554427759876', 4);
 INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Level 5', 'contato@level5.com', '44555444000100', 'Rua Beutrano de Tal, 123', '+551199999876', 4);
-INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Microsoft', 'contato@outlook.com', '36555444000234', 'Av. Vale do Silicio, 1111', '+552223459888', 4);
+INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Microsoft', 'contato@outlook.com', '36.555.444/0002-34', 'Av. Vale do Silicio, 1111', '+552223459888', 4);
 
 INSERT INTO tb_role (authority) VALUES ('ROLE_USER_STOCK');
 INSERT INTO tb_role (authority) VALUES ('ROLE_ADMIN');

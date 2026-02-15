@@ -1,11 +1,17 @@
 package com.formacaospring.dscommerce.dto;
 
 import com.formacaospring.dscommerce.entities.Client;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class ClientDTO {
     private Long id;
     private String name;
     private String email;
+
+    @Size(min = 10, max = 16, message = "CNPJ precisa ter de 10 a 16 números.")
+    @NotNull(message = "Campo requerido!")
     private String cnpj;
     private String address;
     private String phone;
