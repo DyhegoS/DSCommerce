@@ -29,15 +29,13 @@ public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
+	private String username;
 
 	@Column(unique = true)
 	private String email;
-	private String phone;
-	private LocalDate birthDate;
 	private String password;
 
-	@OneToMany(mappedBy = "client")	
+	@OneToMany(mappedBy = "user")
 	List<Order> orders = new ArrayList<>();
 
 	@ManyToMany
@@ -49,13 +47,11 @@ public class User implements UserDetails{
 	public User(){
 	}
 	
-	public User(Long id, String name, String email, String phone, LocalDate birthDate, String password) {
+	public User(Long id, String username, String email, String password) {
 		super();
 		this.id = id;
-		this.name = name;
+		this.username = username;
 		this.email = email;
-		this.phone = phone;
-		this.birthDate = birthDate;
 		this.password = password;
 	}
 
@@ -67,12 +63,8 @@ public class User implements UserDetails{
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -81,22 +73,6 @@ public class User implements UserDetails{
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
 	}
 
 	public String getPassword() {
@@ -130,7 +106,7 @@ public class User implements UserDetails{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(id, username);
 	}
 
 	@Override
@@ -142,7 +118,7 @@ public class User implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(id, other.id) && Objects.equals(name, other.name);
+		return Objects.equals(id, other.id) && Objects.equals(username, other.username);
 	}
 
 	@Override

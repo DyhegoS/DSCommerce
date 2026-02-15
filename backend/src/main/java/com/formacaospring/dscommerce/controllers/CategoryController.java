@@ -1,5 +1,6 @@
 package com.formacaospring.dscommerce.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.formacaospring.dscommerce.dto.CategoryDTO;
@@ -18,6 +19,7 @@ public class CategoryController {
     @Autowired
     private CategoryService service;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER_STOCK')")
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> findAll(){
         List<CategoryDTO> list = service.findAll();

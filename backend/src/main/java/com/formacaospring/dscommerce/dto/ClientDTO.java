@@ -16,7 +16,7 @@ public class ClientDTO {
 
     public ClientDTO(User entity){
         id = entity.getId();
-        name = entity.getName();
+        name = entity.getUsername();
     }
 
     public Long getId() {

@@ -40,7 +40,7 @@ public class OrderService {
     public OrderDTO findById(Long id) {
         Order order = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Recurso não encontrado!"));
-        authService.validateSelfOrAdmin(order.getClient().getId());
+        authService.validateSelfOrAdmin(order.getUser().getId());
         return new OrderDTO(order);
     }
 
@@ -52,7 +52,7 @@ public class OrderService {
         order.setStatus(OrderStatus.WAITING_PAYMENT);
 
         User user = userService.authenticated();
-        order.setClient(user);
+        order.setUser(user);
 
         for(OrderItemDTO itemDto : dto.getItems()){
             Product product = productRepository.getReferenceById(itemDto.getProductId());

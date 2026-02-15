@@ -37,7 +37,7 @@ public class OrderDTO {
         id = entity.getId();
         moment = entity.getMoment();
         status = entity.getStatus();
-        client = new ClientDTO(entity.getClient());
+        client = new ClientDTO(entity.getUser());
         payment = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
         for(OrderItem item : entity.getItems()){
             OrderItemDTO itemDto = new OrderItemDTO(item);

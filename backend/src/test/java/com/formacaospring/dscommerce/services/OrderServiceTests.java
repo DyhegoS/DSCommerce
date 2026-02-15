@@ -143,7 +143,7 @@ public class OrderServiceTests {
 	public void insertShouldThrowUsernameNotFoundExceptionWhenUserNotLogged() {
 		Mockito.doThrow(UsernameNotFoundException.class).when(userService).authenticated();
 		
-		order.setClient(new User());
+		order.setUser(new User());
 		orderDTO = new OrderDTO(order);
 		
 		Assertions.assertThrows(UsernameNotFoundException.class, () -> {
