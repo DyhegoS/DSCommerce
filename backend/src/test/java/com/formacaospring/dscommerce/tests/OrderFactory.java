@@ -12,7 +12,7 @@ import com.formacaospring.dscommerce.entities.User;
 
 public class OrderFactory {
 	public static Order createOrder(User user, Client client) {
-		Order order = new Order(1L, Instant.now(), OrderStatus.WAITING_APPROVAL, user, new Payment(), client);
+		Order order = new Order(1L, Instant.now(), null, OrderStatus.WAITING_APPROVAL, user, new Payment(), client);
 		Product product = ProductFactory.createProduct();
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);
 		order.getItems().add(orderItem);

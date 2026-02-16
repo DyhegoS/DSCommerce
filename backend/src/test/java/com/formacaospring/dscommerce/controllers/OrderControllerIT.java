@@ -71,7 +71,7 @@ public class OrderControllerIT {
 		invalidToken = adminToken + "xpto"; // Simulates a wrong token
 		
 		user = UserFactory.createSellerUser();
-		order = new Order(null, Instant.now(), OrderStatus.WAITING_APPROVAL, user, null, client);
+		order = new Order(null, Instant.now(), null, OrderStatus.WAITING_APPROVAL, user, null, client);
 		
 		Product product = ProductFactory.createProduct();
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);

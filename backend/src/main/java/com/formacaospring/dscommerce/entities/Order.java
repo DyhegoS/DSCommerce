@@ -27,6 +27,10 @@ public class Order {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
+    
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updateMoment;
+    
     private OrderStatus status;
 
     @ManyToOne
@@ -46,9 +50,10 @@ public class Order {
     public Order(){
     }
 
-    public Order(Long id, Instant moment, OrderStatus status, User user, Payment payment, Client client) {
+    public Order(Long id, Instant moment, Instant updateMoment, OrderStatus status, User user, Payment payment, Client client) {
         this.id = id;
         this.moment = moment;
+        this.updateMoment = updateMoment;
         this.status = status;
         this.user = user;
         this.payment = payment;
@@ -71,7 +76,15 @@ public class Order {
         this.moment = moment;
     }
 
-    public OrderStatus getStatus() {
+    public Instant getUpdateMoment() {
+		return updateMoment;
+	}
+
+	public void setUpdateMoment(Instant updateMoment) {
+		this.updateMoment = updateMoment;
+	}
+
+	public OrderStatus getStatus() {
         return status;
     }
 

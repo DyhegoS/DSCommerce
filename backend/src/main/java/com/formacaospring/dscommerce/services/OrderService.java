@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.dto.OrderDTO;
 import com.formacaospring.dscommerce.dto.OrderItemDTO;
+import com.formacaospring.dscommerce.dto.UpdateOrderDTO;
 import com.formacaospring.dscommerce.entities.Client;
 import com.formacaospring.dscommerce.entities.Order;
 import com.formacaospring.dscommerce.entities.OrderItem;
@@ -20,6 +21,8 @@ import com.formacaospring.dscommerce.repositories.OrderRepository;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
 import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class OrderService {
@@ -54,7 +57,7 @@ public class OrderService {
     public OrderDTO insert(OrderDTO dto) {
         Order order = new Order();
         Client client = clientRepository.findById(dto.getClient().getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Cliente não encontrado!"));;
+                () -> new ResourceNotFoundException("Cliente não encontrado!"));
 
         order.setMoment(Instant.now());
         order.setStatus(OrderStatus.WAITING_APPROVAL);
@@ -78,5 +81,28 @@ public class OrderService {
         orderItemRepository.saveAll(order.getItems());
 
         return new OrderDTO(order);
+    }
+    
+    @Transactional
+    public UpdateOrderDTO update(Long id, UpdateOrderDTO dto) {
+    	try {
+    		Order order = repository.getReferenceById(id);
+        	Client client = clientRepository.getReferenceById(dto.getClientId());
+        	
+        	if(dto.getClientId() != null) {
+        		order.setClient(client);
+        	}
+        	
+        	order.setStatus(dto.getOrderStatus());
+        	order.setUpdateMoment(Instant.now());
+        	
+        	order = repository.save(order);
+        	
+        	return new UpdateOrderDTO(order);
+        	
+    	}catch(EntityNotFoundException e) {
+    		throw new ResourceNotFoundException("Recurso não encontrado!");
+    	}
+    	
     }
 }
