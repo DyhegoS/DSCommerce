@@ -63,7 +63,7 @@ public class ProductControllerIT {
 		invalidToken = tokenAdmin + "xpto";
 		
 		Category category = new Category(2L, "Eletronics");
-		product = new Product(null, "Playstation 5", "blablablablablablablablablabla", 3000.0,
+		product = new Product(null, "Playstation 5", "blablablablablablablablablabla", 3000.0, 2,
 				"blablablablablablablablablabla");
 		product.getCategories().add(category);
 		productDTO = new ProductDTO(product);

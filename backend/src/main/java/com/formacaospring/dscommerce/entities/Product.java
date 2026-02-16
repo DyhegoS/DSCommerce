@@ -27,6 +27,7 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
+    private Integer quantity;
     private String imgUrl;
 
     @ManyToMany
@@ -41,12 +42,13 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, String description, Double price, String imgUrl) {
+    public Product(Long id, String name, String description, Double price, Integer quantity, String imgUrl) {
 
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.quantity = quantity;
         this.imgUrl = imgUrl;
     }
 
@@ -81,8 +83,16 @@ public class Product {
     public void setPrice(Double price) {
         this.price = price;
     }
+    
+    public Integer getQuantity() {
+		return quantity;
+	}
 
-    public String getImgUrl() {
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getImgUrl() {
         return imgUrl;
     }
 

@@ -17,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formacaospring.dscommerce.dto.OrderDTO;
+import com.formacaospring.dscommerce.entities.Client;
 import com.formacaospring.dscommerce.entities.Order;
 import com.formacaospring.dscommerce.entities.OrderItem;
 import com.formacaospring.dscommerce.entities.OrderStatus;
@@ -26,7 +28,6 @@ import com.formacaospring.dscommerce.entities.User;
 import com.formacaospring.dscommerce.tests.ProductFactory;
 import com.formacaospring.dscommerce.tests.TokenUtil;
 import com.formacaospring.dscommerce.tests.UserFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,34 +42,36 @@ public class OrderControllerIT {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
-	private String clientUsername, clientPassword, adminUsername, adminPassword, adminOnlyUsername, adminOnlyPassword;
+	private String sellerUsername, sellerPassword, adminUsername, adminPassword, adminOnlyUsername, adminOnlyPassword;
 	private String clientToken, adminToken, adminOnlyToken, invalidToken;
 	private Long existingOrderId, nonExistingOrderId;
 	
 	private Order order;
 	private OrderDTO orderDTO;
 	private User user;
+	private Client client;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		clientUsername = "maria@gmail.com";
-		clientPassword = "123456";
-		adminUsername = "alex@gmail.com";
+		sellerUsername = "jaja24@gmail.com";
+		sellerPassword = "123456";
+		adminUsername = "admin@gmail.com";
 		adminPassword = "123456";
+		
 		adminOnlyUsername = "ana@gmail.com";
 		adminOnlyPassword = "123456";
 		
 		existingOrderId = 1L;
 		nonExistingOrderId = 1000L;
 		
-		clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
+		clientToken = tokenUtil.obtainAccessToken(mockMvc, sellerUsername, sellerPassword);
 		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		adminOnlyToken = tokenUtil.obtainAccessToken(mockMvc, adminOnlyUsername, adminOnlyPassword);
 		invalidToken = adminToken + "xpto"; // Simulates a wrong token
 		
-		user = UserFactory.createClientUser();
-		order = new Order(null, Instant.now(), OrderStatus.WAITING_PAYMENT, user, null);
+		user = UserFactory.createSellerUser();
+		order = new Order(null, Instant.now(), OrderStatus.WAITING_APPROVAL, user, null, client);
 		
 		Product product = ProductFactory.createProduct();
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);

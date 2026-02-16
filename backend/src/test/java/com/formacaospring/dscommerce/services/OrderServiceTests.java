@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.formacaospring.dscommerce.dto.OrderDTO;
+import com.formacaospring.dscommerce.entities.Client;
 import com.formacaospring.dscommerce.entities.Order;
 import com.formacaospring.dscommerce.entities.OrderItem;
 import com.formacaospring.dscommerce.entities.Product;
@@ -57,7 +58,8 @@ public class OrderServiceTests {
 	private Order order;
 	private OrderDTO orderDTO;
 	private Product product;
-	private User admin, client;
+	private User admin, user;
+	private Client client;
 	
 	@BeforeEach
 	void setUp() throws Exception{
@@ -68,8 +70,8 @@ public class OrderServiceTests {
 		nonExistingProductId = 2L;
 		
 		admin = UserFactory.createCustomAdminUser(1L, "alex");
-		client = UserFactory.createCustomClientUser(2L, "ana");
-		order = OrderFactory.createOrder(client);
+		user = UserFactory.createCustomClientUser(2L, "ana");
+		order = OrderFactory.createOrder(user,client);
 		product = ProductFactory.createProduct();
 		orderDTO = new OrderDTO(order);
 		
@@ -132,7 +134,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldOrderDTOWhenClientLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(client);
+		Mockito.when(userService.authenticated()).thenReturn(user);
 		
 		OrderDTO result = service.insert(orderDTO);
 		
@@ -153,7 +155,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldThrowEntityNotFoundExceptionWhenOrderProductIdDoesNotExist() {
-		Mockito.when(userService.authenticated()).thenReturn(client);
+		Mockito.when(userService.authenticated()).thenReturn(user);
 		
 		product.setId(nonExistingProductId);
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);

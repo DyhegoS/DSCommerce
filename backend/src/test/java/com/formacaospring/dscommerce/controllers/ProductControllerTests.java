@@ -70,7 +70,7 @@ public class ProductControllerTests {
 		adminUsername = "alex@gmail.com";
 		adminPassword = "123456";
 		
-		Mockito.when(userService.loadUserByUsername(clientUsername)).thenReturn(UserFactory.createClientUser());
+		Mockito.when(userService.loadUserByUsername(clientUsername)).thenReturn(UserFactory.createSellerUser());
 		Mockito.when(userService.loadUserByUsername(adminUsername)).thenReturn(UserFactory.createAdminUser());
 		
 		clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);

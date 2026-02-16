@@ -16,6 +16,7 @@ import com.formacaospring.dscommerce.entities.User;
 import com.formacaospring.dscommerce.repositories.OrderItemRepository;
 import com.formacaospring.dscommerce.repositories.OrderRepository;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
+import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -57,6 +58,11 @@ public class OrderService {
         for(OrderItemDTO itemDto : dto.getItems()){
             Product product = productRepository.getReferenceById(itemDto.getProductId());
             OrderItem item = new OrderItem(order, product, itemDto.getQuantity(), product.getPrice());
+            if(item.getQuantity() > product.getQuantity()) {
+            	throw new DatabaseException("Item " + product.getName() +": quantidade no pedido maior que o item no estoque!");
+            }
+            Integer currentQuantity = product.getQuantity();
+            product.setQuantity(currentQuantity - itemDto.getQuantity());
             order.getItems().add(item);
         }
 
