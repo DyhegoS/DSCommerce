@@ -16,6 +16,7 @@ public class OrderDTO {
     private OrderStatus status;
 
     private UserDTO user;
+    private ClientDTO client;
 
     private PaymentDTO payment;
 
@@ -25,11 +26,12 @@ public class OrderDTO {
     public OrderDTO(){
     }
 
-    public OrderDTO(Long id, Instant moment, OrderStatus status, UserDTO user, PaymentDTO payment) {
+    public OrderDTO(Long id, Instant moment, OrderStatus status, UserDTO user, ClientDTO client, PaymentDTO payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.user = user;
+        this.client = client;
         this.payment = payment;
     }
 
@@ -38,6 +40,7 @@ public class OrderDTO {
         moment = entity.getMoment();
         status = entity.getStatus();
         user = new UserDTO(entity.getUser());
+        client = new ClientDTO(entity.getClient());
         payment = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
         for(OrderItem item : entity.getItems()){
             OrderItemDTO itemDto = new OrderItemDTO(item);
@@ -61,7 +64,11 @@ public class OrderDTO {
          return user;
      }
 
-     public PaymentDTO getPayment() {
+     public ClientDTO getClient() {
+		return client;
+	}
+
+	 public PaymentDTO getPayment() {
          return payment;
      }
 

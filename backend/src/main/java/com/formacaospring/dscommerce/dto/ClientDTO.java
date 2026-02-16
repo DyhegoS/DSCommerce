@@ -18,6 +18,10 @@ public class ClientDTO {
 
     public ClientDTO(){
     }
+    
+    public ClientDTO(Long id) {
+    	this.id = id;
+    }
 
     public ClientDTO(Long id, String name, String email, String cnpj, String address, String phone) {
         this.id = id;

@@ -8,11 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.dto.OrderDTO;
 import com.formacaospring.dscommerce.dto.OrderItemDTO;
+import com.formacaospring.dscommerce.entities.Client;
 import com.formacaospring.dscommerce.entities.Order;
 import com.formacaospring.dscommerce.entities.OrderItem;
 import com.formacaospring.dscommerce.entities.OrderStatus;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.repositories.ClientRepository;
 import com.formacaospring.dscommerce.repositories.OrderItemRepository;
 import com.formacaospring.dscommerce.repositories.OrderRepository;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
@@ -30,6 +32,9 @@ public class OrderService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+    
+    @Autowired
+    private ClientRepository clientRepository;
 
     @Autowired
     private UserService userService;
@@ -48,9 +53,12 @@ public class OrderService {
     @Transactional
     public OrderDTO insert(OrderDTO dto) {
         Order order = new Order();
+        Client client = clientRepository.findById(dto.getClient().getId()).orElseThrow(
+                () -> new ResourceNotFoundException("Cliente não encontrado!"));;
 
         order.setMoment(Instant.now());
         order.setStatus(OrderStatus.WAITING_APPROVAL);
+        order.setClient(client);
 
         User user = userService.authenticated();
         order.setUser(user);
