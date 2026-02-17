@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotEmpty;
 public class OrderDTO {
     private Long id;
     private Instant moment;
+    private Instant updateMoment;
     private OrderStatus status;
 
     private UserDTO user;
@@ -26,7 +27,7 @@ public class OrderDTO {
     public OrderDTO(){
     }
 
-    public OrderDTO(Long id, Instant moment, OrderStatus status, UserDTO user, ClientDTO client, PaymentDTO payment) {
+    public OrderDTO(Long id, Instant moment, Instant updateMoment, OrderStatus status, UserDTO user, ClientDTO client, PaymentDTO payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
@@ -38,6 +39,7 @@ public class OrderDTO {
      public OrderDTO(Order entity) {
         id = entity.getId();
         moment = entity.getMoment();
+        updateMoment = entity.getUpdateMoment();
         status = entity.getStatus();
         user = new UserDTO(entity.getUser());
         client = new ClientDTO(entity.getClient());
@@ -56,7 +58,11 @@ public class OrderDTO {
          return moment;
      }
 
-     public OrderStatus getStatus() {
+    public Instant getUpdateMoment() {
+        return updateMoment;
+    }
+
+    public OrderStatus getStatus() {
          return status;
      }
 

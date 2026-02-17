@@ -1,6 +1,7 @@
 package com.formacaospring.dscommerce.services;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,13 +88,15 @@ public class OrderService {
     public UpdateOrderDTO update(Long id, UpdateOrderDTO dto) {
     	try {
     		Order order = repository.getReferenceById(id);
-        	Client client = clientRepository.getReferenceById(dto.getClientId());
-        	
+
         	if(dto.getClientId() != null) {
+                Client client = clientRepository.findById(dto.getClientId()).orElseThrow(
+                        () -> new ResourceNotFoundException("Cliente não encontrado!"));
+
         		order.setClient(client);
         	}
         	
-        	order.setStatus(dto.getOrderStatus());
+        	order.setStatus(dto.getStatus());
         	order.setUpdateMoment(Instant.now());
         	
         	order = repository.save(order);
