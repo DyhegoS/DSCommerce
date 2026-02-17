@@ -75,9 +75,9 @@ INSERT INTO tb_user_role (user_id, role_id) VALUES (2, 3);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (3, 2);
 INSERT INTO tb_user_role (user_id, role_id) VALUES (4, 3);
 
-INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-25T13:00:00Z', 1, 4, 1);
-INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-15T15:50:00Z', 3, 4, 2);
-INSERT INTO tb_order (moment, status, user_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-03T14:20:00Z', 0, 4, 3);
+INSERT INTO tb_order (moment, status, user_id, user_update_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-25T13:00:00Z', 1, 4, 4, 1);
+INSERT INTO tb_order (moment, status, user_id, user_update_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-15T15:50:00Z', 3, 4, 4, 2);
+INSERT INTO tb_order (moment, status, user_id, user_update_id, client_id) VALUES (TIMESTAMP WITH TIME ZONE '2026-01-03T14:20:00Z', 0, 4, 4, 3);
 
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (1, 1, 2, 90.5);
 INSERT INTO tb_order_item (order_id, product_id, quantity, price) VALUES (1, 3, 1, 1250.0);

@@ -33,14 +33,14 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
         ProductDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
         @RequestParam(name = "name", defaultValue = "") String name,
@@ -49,7 +49,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){
         dto = service.insert(dto);
@@ -57,14 +57,14 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,@Valid @RequestBody ProductDTO dto){
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

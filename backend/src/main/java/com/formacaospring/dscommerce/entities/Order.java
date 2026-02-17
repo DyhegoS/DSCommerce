@@ -37,6 +37,10 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "user_update_id", nullable = true)
+    private User userUpdate;
+
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
@@ -50,12 +54,13 @@ public class Order {
     public Order(){
     }
 
-    public Order(Long id, Instant moment, Instant updateMoment, OrderStatus status, User user, Payment payment, Client client) {
+    public Order(Long id, Instant moment, Instant updateMoment, OrderStatus status, User user, User userUpdate, Payment payment, Client client) {
         this.id = id;
         this.moment = moment;
         this.updateMoment = updateMoment;
         this.status = status;
         this.user = user;
+        this.userUpdate = userUpdate;
         this.payment = payment;
         this.client = client;
     }
@@ -98,6 +103,14 @@ public class Order {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUserUpdate() {
+        return userUpdate;
+    }
+
+    public void setUserUpdate(User userUpdate) {
+        this.userUpdate = userUpdate;
     }
 
     public Payment getPayment() {

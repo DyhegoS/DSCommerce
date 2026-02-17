@@ -66,6 +66,7 @@ public class OrderService {
 
         User user = userService.authenticated();
         order.setUser(user);
+        order.setUserUpdate(user);
 
         for(OrderItemDTO itemDto : dto.getItems()){
             Product product = productRepository.getReferenceById(itemDto.getProductId());
@@ -95,6 +96,9 @@ public class OrderService {
 
         		order.setClient(client);
         	}
+
+            User user = userService.authenticated();
+            order.setUserUpdate(user);
         	
         	order.setStatus(dto.getStatus());
         	order.setUpdateMoment(Instant.now());
