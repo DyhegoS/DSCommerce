@@ -21,6 +21,8 @@ public class Payment {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
 
+    private PaymentStatus status;
+
     @OneToOne
     @MapsId
     private Order order;
@@ -28,9 +30,10 @@ public class Payment {
     public Payment(){
     }
 
-    public Payment(Long id, Instant moment, Order order) {
+    public Payment(Long id, Instant moment, PaymentStatus status, Order order) {
         this.id = id;
         this.moment = moment;
+        this.status = status;
         this.order = order;
     }
 
@@ -48,6 +51,14 @@ public class Payment {
 
     public void setMoment(Instant moment) {
         this.moment = moment;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(PaymentStatus status) {
+        this.status = status;
     }
 
     public Order getOrder() {
