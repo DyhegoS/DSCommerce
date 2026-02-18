@@ -36,7 +36,7 @@ public class UserServiceTests {
     private CustomUserUtil userUtil;
 
     private String existingUsername, nonExistingUsername;
-    private User user;
+    private User seller;
     private UserDTO userDTO;
     private List<UserDetailsProjection> userDetails;
 
@@ -44,12 +44,12 @@ public class UserServiceTests {
     void setUp() throws Exception{
         existingUsername = "ana@gmail.com";
         nonExistingUsername = "mike@gmail.com";
-        user = UserFactory.createCustomClientUser(1L, existingUsername);
+        seller = UserFactory.createSellerUser();
         userDetails = UserDetailsFactory.createCustomAdminUser(existingUsername);
 
         Mockito.when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
         Mockito.when(repository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(new ArrayList<>());
-        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(Optional.of(user));
+        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(Optional.of(seller));
         Mockito.when(repository.findByEmail(nonExistingUsername)).thenReturn(Optional.empty());
     }
 
@@ -89,7 +89,7 @@ public class UserServiceTests {
     @Test
     public void getMeShouldReturnUserDTOWhenUserAuthenticated() {
     	UserService spyUserService = Mockito.spy(service);
-    	Mockito.doReturn(user).when(spyUserService).authenticated();
+    	Mockito.doReturn(seller).when(spyUserService).authenticated();
     	
     	UserDTO result = spyUserService.getMe();
     	

@@ -14,6 +14,9 @@ public class UserDTO {
 	private String email;
 
     private List<String> roles = new ArrayList<>();
+    
+    public UserDTO() {
+    }
 
     public UserDTO(User entity) {
         id = entity.getId();

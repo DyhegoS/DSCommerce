@@ -58,7 +58,7 @@ public class OrderServiceTests {
 	private Order order;
 	private OrderDTO orderDTO;
 	private Product product;
-	private User admin, user;
+	private User admin, seller;
 	private Client client;
 	
 	@BeforeEach
@@ -69,9 +69,9 @@ public class OrderServiceTests {
 		existingProductId = 1L;
 		nonExistingProductId = 2L;
 		
-		admin = UserFactory.createCustomAdminUser(1L, "alex");
-		user = UserFactory.createCustomClientUser(2L, "ana");
-		order = OrderFactory.createOrder(user,client);
+		admin = UserFactory.createAdminUser();
+		seller = UserFactory.createSellerUser();
+		order = OrderFactory.createOrder(seller,client);
 		product = ProductFactory.createProduct();
 		orderDTO = new OrderDTO(order);
 		
@@ -134,7 +134,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldOrderDTOWhenClientLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(user);
+		Mockito.when(userService.authenticated()).thenReturn(seller);
 		
 		OrderDTO result = service.insert(orderDTO);
 		
@@ -155,7 +155,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldThrowEntityNotFoundExceptionWhenOrderProductIdDoesNotExist() {
-		Mockito.when(userService.authenticated()).thenReturn(user);
+		Mockito.when(userService.authenticated()).thenReturn(seller);
 		
 		product.setId(nonExistingProductId);
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);

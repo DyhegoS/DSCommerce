@@ -1,5 +1,7 @@
 package com.formacaospring.dscommerce.controllers;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -25,6 +27,7 @@ import com.formacaospring.dscommerce.entities.OrderItem;
 import com.formacaospring.dscommerce.entities.OrderStatus;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.tests.ClientFactory;
 import com.formacaospring.dscommerce.tests.ProductFactory;
 import com.formacaospring.dscommerce.tests.TokenUtil;
 import com.formacaospring.dscommerce.tests.UserFactory;
@@ -42,8 +45,8 @@ public class OrderControllerIT {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
-	private String sellerUsername, sellerPassword, adminUsername, adminPassword, adminOnlyUsername, adminOnlyPassword;
-	private String clientToken, adminToken, adminOnlyToken, invalidToken;
+	private String userSellerUsername, otherUserSellerUsername, userSellerPassword, otherUserSellerPassword, adminUsername, adminPassword;
+	private String userSellerToken, otherUserSellerToken, adminToken, invalidToken;
 	private Long existingOrderId, nonExistingOrderId;
 	
 	private Order order;
@@ -54,24 +57,24 @@ public class OrderControllerIT {
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		sellerUsername = "jaja24@gmail.com";
-		sellerPassword = "123456";
+		userSellerUsername = "jaja24@gmail.com";
+		userSellerPassword = "123456";
+		otherUserSellerUsername = "alex@gmail.com";
+		otherUserSellerPassword = "123456";
 		adminUsername = "admin@gmail.com";
 		adminPassword = "123456";
-		
-		adminOnlyUsername = "ana@gmail.com";
-		adminOnlyPassword = "123456";
+		client = ClientFactory.createClient();
 		
 		existingOrderId = 1L;
 		nonExistingOrderId = 1000L;
 		
-		clientToken = tokenUtil.obtainAccessToken(mockMvc, sellerUsername, sellerPassword);
+		userSellerToken = tokenUtil.obtainAccessToken(mockMvc, userSellerUsername, userSellerPassword);
 		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
-		adminOnlyToken = tokenUtil.obtainAccessToken(mockMvc, adminOnlyUsername, adminOnlyPassword);
+		otherUserSellerToken = tokenUtil.obtainAccessToken(mockMvc, otherUserSellerUsername, otherUserSellerPassword);
 		invalidToken = adminToken + "xpto"; // Simulates a wrong token
 		
 		user = UserFactory.createSellerUser();
-		order = new Order(null, Instant.now(), null, OrderStatus.WAITING_APPROVAL, user, null, client);
+		order = new Order(null, Instant.now(), null, OrderStatus.WAITING_APPROVAL, user, user, null, client);
 		
 		Product product = ProductFactory.createProduct();
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);
@@ -90,8 +93,10 @@ public class OrderControllerIT {
 		
 		result.andExpect(status().isOk());
 		result.andExpect(jsonPath("$.id").value(1L));
-		result.andExpect(jsonPath("$.moment").value("2022-07-25T13:00:00Z"));
-		result.andExpect(jsonPath("$.status").value("PAID"));
+		result.andExpect(jsonPath("$.moment").value("2026-01-25T13:00:00Z"));
+		result.andExpect(jsonPath("$.status").value("SEPARATION"));
+		result.andExpect(jsonPath("$.user").exists());
+		result.andExpect(jsonPath("$.userUpdate").exists());
 		result.andExpect(jsonPath("$.client").exists());
 		result.andExpect(jsonPath("$.payment").exists());
 		result.andExpect(jsonPath("$.items").exists());
@@ -99,17 +104,19 @@ public class OrderControllerIT {
 	}
 	
 	@Test
-	public void findByIdShouldReturnOrderDTOWhenIdExistsAndClientLogged() throws Exception {
+	public void findByIdShouldReturnOrderDTOWhenIdExistsAndUserSellerLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/orders/{id}", existingOrderId)
-					.header("Authorization", "Bearer " + clientToken)
+					.header("Authorization", "Bearer " + userSellerToken)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
-		result.andExpect(jsonPath("$.id").value(1L));
-		result.andExpect(jsonPath("$.moment").value("2022-07-25T13:00:00Z"));
-		result.andExpect(jsonPath("$.status").value("PAID"));
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.moment").value("2026-01-25T13:00:00Z"));
+		result.andExpect(jsonPath("$.status").value("SEPARATION"));
+		result.andExpect(jsonPath("$.user").exists());
+		result.andExpect(jsonPath("$.userUpdate").exists());
 		result.andExpect(jsonPath("$.client").exists());
 		result.andExpect(jsonPath("$.payment").exists());
 		result.andExpect(jsonPath("$.items").exists());
@@ -117,13 +124,12 @@ public class OrderControllerIT {
 	}
 	
 	@Test
-	public void findByIdShouldReturnForbiddenWhenIdExistsAndClientLogged() throws Exception {
+	public void findByIdShouldReturnForbiddenWhenIdExistsAndOtherUserSellerLogged() throws Exception {
 		
-		Long otherOrderId = 2L;
 		
 		ResultActions result = 
-				mockMvc.perform(get("/orders/{id}", otherOrderId)
-					.header("Authorization", "Bearer " + clientToken)
+				mockMvc.perform(get("/orders/{id}", existingOrderId)
+					.header("Authorization", "Bearer " + otherUserSellerToken)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isForbidden());
@@ -141,11 +147,11 @@ public class OrderControllerIT {
 	}
 	
 	@Test
-	public void findByIdShouldReturnNotFoundWhenIdDoesNotExistAndClientLogged() throws Exception {
+	public void findByIdShouldReturnNotFoundWhenIdDoesNotExistAndUserSellerLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/orders/{id}", nonExistingOrderId)
-					.header("Authorization", "Bearer " + clientToken)
+					.header("Authorization", "Bearer " + userSellerToken)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNotFound());
@@ -163,22 +169,25 @@ public class OrderControllerIT {
 	}
 	
 	@Test
-	public void insertShouldReturnOrderDTOCreatedWhenClientLogged() throws Exception {
+	public void insertShouldReturnOrderDTOCreatedWhenUserSellerLogged() throws Exception {
 
 		String jsonBody = objectMapper.writeValueAsString(orderDTO);
 		
 		ResultActions result = 
 				mockMvc.perform(post("/orders")
-					.header("Authorization", "Bearer " + clientToken)
+					.header("Authorization", "Bearer " + userSellerToken)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON))
 					.andDo(MockMvcResultHandlers.print());
 		
 		result.andExpect(status().isCreated());
-		result.andExpect(jsonPath("$.id").value(4L));
+		result.andExpect(jsonPath("$.id").exists());
 		result.andExpect(jsonPath("$.moment").exists());
-		result.andExpect(jsonPath("$.status").value("WAITING_PAYMENT"));
+		result.andExpect(jsonPath("$.updateMoment").value(is(nullValue())));
+		result.andExpect(jsonPath("$.status").value("WAITING_APPROVAL"));
+		result.andExpect(jsonPath("$.user").exists());
+		result.andExpect(jsonPath("$.userUpdate").exists());
 		result.andExpect(jsonPath("$.client").exists());
 		result.andExpect(jsonPath("$.items").exists());
 		result.andExpect(jsonPath("$.total").exists());
@@ -193,7 +202,7 @@ public class OrderControllerIT {
 		
 		ResultActions result = 
 				mockMvc.perform(post("/orders")
-					.header("Authorization", "Bearer " + clientToken)
+					.header("Authorization", "Bearer " + userSellerToken)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON))
@@ -209,12 +218,12 @@ public class OrderControllerIT {
 		
 		ResultActions result = 
 				mockMvc.perform(post("/orders")
-					.header("Authorization", "Bearer " + adminOnlyToken)
+					.header("Authorization", "Bearer " + adminToken)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON));
 		
-		result.andExpect(status().isForbidden());
+		result.andExpect(status().isCreated());
 	}
 	
 	@Test

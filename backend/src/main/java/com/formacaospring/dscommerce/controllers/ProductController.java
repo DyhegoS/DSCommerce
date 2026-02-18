@@ -33,17 +33,17 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
         ProductDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
-        @RequestParam(name = "name", defaultValue = "") String name,
+        @RequestParam( defaultValue = "") String name,
         Pageable pageable){
         Page<ProductMinDTO> dto = service.findAll(name, pageable);
         return ResponseEntity.ok(dto);
