@@ -1,10 +1,7 @@
 package com.formacaospring.dscommerce.services;
 
 import java.time.Instant;
-import java.util.Optional;
 
-import com.formacaospring.dscommerce.dto.OrderMinDTO;
-import com.formacaospring.dscommerce.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.dto.OrderDTO;
 import com.formacaospring.dscommerce.dto.OrderItemDTO;
+import com.formacaospring.dscommerce.dto.OrderMinDTO;
 import com.formacaospring.dscommerce.dto.UpdateOrderDTO;
+import com.formacaospring.dscommerce.entities.Client;
+import com.formacaospring.dscommerce.entities.Order;
+import com.formacaospring.dscommerce.entities.OrderItem;
+import com.formacaospring.dscommerce.entities.OrderStatus;
+import com.formacaospring.dscommerce.entities.Payment;
+import com.formacaospring.dscommerce.entities.PaymentStatus;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.entities.User;
 import com.formacaospring.dscommerce.repositories.ClientRepository;
 import com.formacaospring.dscommerce.repositories.OrderItemRepository;
 import com.formacaospring.dscommerce.repositories.OrderRepository;

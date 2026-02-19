@@ -53,8 +53,8 @@ public class ProductControllerTests {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
-	private String clientUsername, clientPassword, adminUsername, adminPassword;
-	private String clientToken, adminToken, invalidToken;
+	private String sellerUsername, sellerPassword, adminUsername, adminPassword, stockUsername, stockPassword;
+	private String sellerToken, adminToken, stockToken, invalidToken;
 	private Long existingProductId, nonExistingProductId;
 	private String productName;
 	
@@ -65,15 +65,19 @@ public class ProductControllerTests {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		clientUsername = "maria@gmail.com";
-		clientPassword = "123456";
-		adminUsername = "alex@gmail.com";
+		sellerUsername = "alex@gmail.com";
+		sellerPassword = "123456";
+		stockUsername = "maria@gmail.com";
+		stockPassword = "123456";
+		adminUsername = "admin@gmail.com";
 		adminPassword = "123456";
 		
-		Mockito.when(userService.loadUserByUsername(clientUsername)).thenReturn(UserFactory.createSellerUser());
+		Mockito.when(userService.loadUserByUsername(sellerUsername)).thenReturn(UserFactory.createSellerUser());
 		Mockito.when(userService.loadUserByUsername(adminUsername)).thenReturn(UserFactory.createAdminUser());
+		Mockito.when(userService.loadUserByUsername(stockUsername)).thenReturn(UserFactory.createStockUser());
 		
-		clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
+		sellerToken = tokenUtil.obtainAccessToken(mockMvc, sellerUsername, sellerPassword);
+		stockToken = tokenUtil.obtainAccessToken(mockMvc, stockUsername, stockPassword);
 		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		invalidToken = adminToken + "xpto"; // invalid token
 		
@@ -99,10 +103,11 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void findAllShouldReturnPageWhenProductNameIsEmpty() throws Exception {
+	public void findAllShouldReturnPageWhenProductNameIsEmptyWhenAdminLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/products")
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON))
 						.andDo(MockMvcResultHandlers.print());
 		
@@ -113,10 +118,41 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void findAllShouldReturnPageWhenProductNameIsNotEmpty() throws Exception {
+	public void findAllShouldReturnPageWhenProductNameIsEmptyWhenUserStockLogged() throws Exception {
+		
+		ResultActions result = 
+				mockMvc.perform(get("/products")
+						.header("Authorization", "Bearer " + stockToken)
+						.accept(MediaType.APPLICATION_JSON))
+						.andDo(MockMvcResultHandlers.print());
+		
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.content").exists());
+		result.andExpect(jsonPath("$.content[0].name").value(productName));
+		result.andExpect(jsonPath("$.pageable").exists());
+	}
+	
+	@Test
+	public void findAllShouldReturnPageWhenProductNameIsEmptyWhenSellerLogged() throws Exception {
+		
+		ResultActions result = 
+				mockMvc.perform(get("/products")
+						.header("Authorization", "Bearer " + sellerToken)
+						.accept(MediaType.APPLICATION_JSON))
+						.andDo(MockMvcResultHandlers.print());
+		
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.content").exists());
+		result.andExpect(jsonPath("$.content[0].name").value(productName));
+		result.andExpect(jsonPath("$.pageable").exists());
+	}
+	
+	@Test
+	public void findAllShouldReturnPageWhenProductNameIsNotEmptyAndAdminLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/products?name={productName}", productName)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON))
 						.andDo(MockMvcResultHandlers.print());
 		
@@ -127,10 +163,11 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void findByIdShouldReturnProductDTOWhenIdExists() throws Exception {
+	public void findByIdShouldReturnProductDTOWhenIdExistsAndAdminLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/products/{id}", existingProductId)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
@@ -144,10 +181,11 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void findByIdShouldThrowsNotFoundExceptionWhenIdDoesNotExist() throws Exception {
+	public void findByIdShouldThrowsNotFoundExceptionWhenIdDoesNotExistAndAdminLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/products/{id}", nonExistingProductId)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNotFound());
@@ -176,13 +214,35 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void insertShouldReturnForbiddenWhenClientLogged() throws Exception {
+	public void insertShouldReturnProductDTOCreatedWhenLoggedAsUserStock() throws Exception {
 		
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
 		ResultActions result = 
 				mockMvc.perform(post("/products")
-						.header("Authorization", "Bearer " + clientToken)
+						.header("Authorization", "Bearer " + stockToken)
+						.content(jsonBody)
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.name").exists());
+		result.andExpect(jsonPath("$.name").value(productName));
+		result.andExpect(jsonPath("$.description").exists());
+		result.andExpect(jsonPath("$.price").exists());
+		result.andExpect(jsonPath("$.imgUrl").exists());
+		result.andExpect(jsonPath("$.categories").exists());		
+	}
+	
+	@Test
+	public void insertShouldReturnForbiddenWhenSellerLogged() throws Exception {
+		
+		String jsonBody = objectMapper.writeValueAsString(productDTO);
+		
+		ResultActions result = 
+				mockMvc.perform(post("/products")
+						.header("Authorization", "Bearer " + sellerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -243,13 +303,13 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void updateShouldReturnForbiddenWhenIdExistsAndClientLogged() throws Exception {
+	public void updateShouldReturnForbiddenWhenIdExistsAndSellerLogged() throws Exception {
 		
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
 		ResultActions result = 
 				mockMvc.perform(put("/products/{id}", existingProductId)
-						.header("Authorization", "Bearer " + clientToken)
+						.header("Authorization", "Bearer " + sellerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -258,13 +318,13 @@ public class ProductControllerTests {
 	}
 	
 	@Test
-	public void updateShouldReturnForbiddenWhenIdDoesNotExistAndClientLogged() throws Exception {
+	public void updateShouldReturnForbiddenWhenIdDoesNotExistAndSellerLogged() throws Exception {
 		
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
 		ResultActions result = 
 				mockMvc.perform(put("/products/{id}", nonExistingProductId)
-						.header("Authorization", "Bearer " + clientToken)
+						.header("Authorization", "Bearer " + sellerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));

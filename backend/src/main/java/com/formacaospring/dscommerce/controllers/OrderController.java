@@ -32,14 +32,14 @@ public class OrderController {
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SELLER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDTO> findById(@PathVariable Long id){
         OrderDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SELLER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @PostMapping
     public ResponseEntity<OrderDTO> insert(@Valid @RequestBody OrderDTO dto){
         dto = service.insert(dto);
@@ -47,7 +47,7 @@ public class OrderController {
         return ResponseEntity.created(uri).body(dto);
     }
     
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PatchMapping (value = "/{id}")
     public ResponseEntity<UpdateOrderDTO> update(@PathVariable Long id,@Valid @RequestBody UpdateOrderDTO dto){
     	dto = service.update(id, dto);

@@ -1,6 +1,5 @@
 package com.formacaospring.dscommerce.entities;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,6 +21,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name = "tb_user")
 public class User implements UserDetails{
@@ -29,6 +29,7 @@ public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String name;
 	private String username;
 
 	@Column(unique = true)
@@ -50,9 +51,9 @@ public class User implements UserDetails{
 	public User(){
 	}
 	
-	public User(Long id, String username, String email, String password) {
-		super();
+	public User(Long id, String name, String username, String email, String password) {
 		this.id = id;
+		this.name = name;
 		this.username = username;
 		this.email = email;
 		this.password = password;
@@ -65,10 +66,20 @@ public class User implements UserDetails{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	
 
 	public String getEmail() {
 		return email;

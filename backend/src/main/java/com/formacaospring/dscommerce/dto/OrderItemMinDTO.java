@@ -1,6 +1,5 @@
 package com.formacaospring.dscommerce.dto;
 
-import com.formacaospring.dscommerce.entities.Order;
 import com.formacaospring.dscommerce.entities.OrderItem;
 
 public class OrderItemMinDTO {

@@ -11,6 +11,7 @@ public class UserDTO {
     
     private Long id;
     private String name;
+    private String username;
 	private String email;
 
     private List<String> roles = new ArrayList<>();
@@ -20,7 +21,8 @@ public class UserDTO {
 
     public UserDTO(User entity) {
         id = entity.getId();
-        name = entity.getUsername();
+        name = entity.getName();
+        username = entity.getUsername();
         email = entity.getEmail();
         for(GrantedAuthority role : entity.getRoles()){
             roles.add(role.getAuthority());
@@ -32,7 +34,11 @@ public class UserDTO {
     }
 
     public String getName() {
-        return name;
+		return name;
+	}
+
+	public String getusername() {
+        return username;
     }
 
     public String getEmail() {

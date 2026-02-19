@@ -56,10 +56,10 @@ INSERT INTO tb_product_category (product_id, category_id) VALUES (24, 3);
 INSERT INTO tb_product_category (product_id, category_id) VALUES (25, 3);
 
 
-INSERT INTO tb_user (username, email, password) VALUES ('Maria Brown', 'maria@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
-INSERT INTO tb_user (username, email, password) VALUES ('Alex Green', 'alex@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
-INSERT INTO tb_user (username, email, password) VALUES ('admin', 'admin@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
-INSERT INTO tb_user (username, email, password) VALUES ('Jailson Mendes', 'jaja24@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
+INSERT INTO tb_user (name, username, email, password) VALUES ('Maria Brown','maria@gmail.com', 'maria@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
+INSERT INTO tb_user (name, username, email, password) VALUES ('Alex Green','alex@gmail.com', 'alex@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
+INSERT INTO tb_user (name, username, email, password) VALUES ('admin','admin@gmail.com', 'admin@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
+INSERT INTO tb_user (name, username, email, password) VALUES ('Jailson Mendes','jaja24@gmail.com', 'jaja24@gmail.com', '$2a$10$N7SkKCa3r17ga.i.dF9iy.BFUBL2n3b6Z1CWSZWi/qy7ABq/E6VpO');
 
 INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Sinco Engenharia', 'contato@sincoengenharia.com', '36555444000152', 'Rua Fulano de Tal, 123', '+551123459876', 4);
 INSERT INTO tb_client (name, email, cnpj, address, phone, user_id) VALUES ('Terabyte Informática', 'contato@terabyte.com', '36555777000153', 'Rua Fulano de Tal, 1555', '+551123458886', 4);
