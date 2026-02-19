@@ -38,6 +38,12 @@ public class ProductService {
         Page<Product> result = repository.searchByName(name, pageable);
         return result.map(x -> new ProductMinDTO(x));
     }
+    
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> findByCategoryName(String categoryName, Pageable pageable){
+    	Page<Product> result = repository.searchByCategory(categoryName, pageable);
+    	return result.map(ProductDTO::new);
+    }
 
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
@@ -71,7 +77,6 @@ public class ProductService {
         catch(DataIntegrityViolationException e){
             throw new DatabaseException("Falha de integridade referencial!");
         }
-
     }
 
     private void copyDtoToentity(ProductDTO dto, Product entity) {

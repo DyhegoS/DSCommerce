@@ -43,11 +43,19 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
-        @RequestParam( defaultValue = "") String name,
+        @RequestParam(defaultValue = "") String name,
         Pageable pageable){
         Page<ProductMinDTO> dto = service.findAll(name, pageable);
         return ResponseEntity.ok(dto);
     }
+    
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
+    @GetMapping
+    public ResponseEntity<Page<ProductDTO>> findByCategoryName(@RequestParam(defaultValue = "") String categoryName, Pageable pageable){
+    	Page<ProductDTO> dto = service.findByCategoryName(categoryName, pageable);
+    	return ResponseEntity.ok(dto);
+    }
+    
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
