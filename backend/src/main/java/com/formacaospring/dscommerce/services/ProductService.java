@@ -34,15 +34,21 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(Pageable pageable) {
+        Page<Product> result = repository.findAll(pageable);
+        return result.map(x -> new ProductMinDTO(x));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findByName(String name, Pageable pageable) {
         Page<Product> result = repository.searchByName(name, pageable);
         return result.map(x -> new ProductMinDTO(x));
     }
     
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findByCategoryName(String categoryName, Pageable pageable){
+    public Page<ProductMinDTO> findByCategoryName(String categoryName, Pageable pageable){
     	Page<Product> result = repository.searchByCategory(categoryName, pageable);
-    	return result.map(ProductDTO::new);
+    	return result.map(ProductMinDTO::new);
     }
 
     @Transactional

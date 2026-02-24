@@ -44,18 +44,21 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
         @RequestParam(defaultValue = "") String name,
+        @RequestParam(defaultValue = "") String categoryName,
         Pageable pageable){
-        Page<ProductMinDTO> dto = service.findAll(name, pageable);
+
+        if(!name.isEmpty() && categoryName.isEmpty()){
+            Page<ProductMinDTO> dto = service.findByName(name, pageable);
+            return ResponseEntity.ok(dto);
+        }else if(name.isEmpty() && !categoryName.isEmpty()){
+            Page<ProductMinDTO> dto = service.findByCategoryName(categoryName, pageable);
+            return ResponseEntity.ok(dto);
+        }
+
+        Page<ProductMinDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
+
     }
-    
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
-    @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findByCategoryName(@RequestParam(defaultValue = "") String categoryName, Pageable pageable){
-    	Page<ProductDTO> dto = service.findByCategoryName(categoryName, pageable);
-    	return ResponseEntity.ok(dto);
-    }
-    
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
