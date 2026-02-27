@@ -62,7 +62,19 @@ public class ProductService {
         List<ProductDTO> dtos = entities.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
 
         return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
-	} 
+	}
+
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> findByMinAndMaxPrice(String min, String max, Pageable pageable){
+        try{
+            Double minPrice = Double.parseDouble(min);
+            Double maxPrice = Double.parseDouble(max);
+            Page<Product> result = repository.searchByMinAndMaxPrice(minPrice, maxPrice, pageable);
+            return result.map(ProductDTO::new);
+        }catch(NumberFormatException e) {
+            throw new NumberFormatException("Favor informa valores válidos!");
+        }
+    }
 
     @Transactional
     public ProductDTO insert(ProductDTO dto) {

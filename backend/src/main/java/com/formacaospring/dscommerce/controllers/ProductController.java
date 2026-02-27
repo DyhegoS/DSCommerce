@@ -48,6 +48,22 @@ public class ProductController {
         return ResponseEntity.ok().body(list);
 	}
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
+    @GetMapping("/price")
+    public ResponseEntity<Page<ProductDTO>> findByMinAndMaxPrice(@RequestParam(defaultValue = "") String min,
+                                                                 @RequestParam(defaultValue = "") String max,
+                                                                 Pageable pageable){
+        if("".equals(min)){
+            min = "0";
+
+        } else if ("".equals(max)) {
+            max = "0";
+        }
+
+        Page<ProductDTO> dto = service.findByMinAndMaxPrice(min, max, pageable);
+        return ResponseEntity.ok(dto);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){
@@ -63,7 +79,7 @@ public class ProductController {
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

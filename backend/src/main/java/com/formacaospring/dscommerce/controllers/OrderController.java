@@ -47,7 +47,7 @@ public class OrderController {
         return ResponseEntity.created(uri).body(dto);
     }
     
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping (value = "/{id}")
     public ResponseEntity<UpdateOrderDTO> update(@PathVariable Long id,@Valid @RequestBody UpdateOrderDTO dto){
     	dto = service.update(id, dto);
