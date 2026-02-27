@@ -91,7 +91,7 @@ public class ProductControllerTests {
 		
 		page = new PageImpl<>(List.of(productMinDTO));
 		
-		Mockito.when(service.findAll(any(), any())).thenReturn(page);
+		Mockito.when(service.findAll(any())).thenReturn(page);
 		
 		Mockito.when(service.findById(existingProductId)).thenReturn(productDTO);
 		Mockito.when(service.findById(nonExistingProductId)).thenThrow(ResourceNotFoundException.class);
