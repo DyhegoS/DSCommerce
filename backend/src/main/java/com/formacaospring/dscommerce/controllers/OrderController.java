@@ -1,23 +1,22 @@
 package com.formacaospring.dscommerce.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.formacaospring.dscommerce.dto.OrderDTO;
-import com.formacaospring.dscommerce.services.OrderService;
-
-import jakarta.validation.Valid;
 
 import java.net.URI;
 
+import com.formacaospring.dscommerce.dto.OrderMinDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.formacaospring.dscommerce.dto.OrderDTO;
+import com.formacaospring.dscommerce.dto.UpdateOrderDTO;
+import com.formacaospring.dscommerce.services.OrderService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -27,18 +26,31 @@ public class OrderController {
     @Autowired
     private OrderService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+    @GetMapping
+    public ResponseEntity<Page<OrderMinDTO>> findAll(Pageable pageable){
+        Page<OrderMinDTO> dto = service.findAll(pageable);
+        return ResponseEntity.ok(dto);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OrderDTO> findById(@PathVariable Long id){
         OrderDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SELLER')")
     @PostMapping
     public ResponseEntity<OrderDTO> insert(@Valid @RequestBody OrderDTO dto){
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
+    }
+    
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PatchMapping (value = "/{id}")
+    public ResponseEntity<UpdateOrderDTO> update(@PathVariable Long id,@Valid @RequestBody UpdateOrderDTO dto){
+    	dto = service.update(id, dto);
+    	return ResponseEntity.ok(dto);
     }
 }

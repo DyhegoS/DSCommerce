@@ -33,21 +33,34 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
         ProductDTO dto = service.findById(id);
         return ResponseEntity.ok(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
-        @RequestParam(name = "name", defaultValue = "") String name,
+        @RequestParam(defaultValue = "") String name,
+        @RequestParam(defaultValue = "") String categoryName,
         Pageable pageable){
-        Page<ProductMinDTO> dto = service.findAll(name, pageable);
+
+        if(!name.isEmpty() && categoryName.isEmpty()){
+            Page<ProductMinDTO> dto = service.findByName(name, pageable);
+            return ResponseEntity.ok(dto);
+        }else if(name.isEmpty() && !categoryName.isEmpty()){
+            Page<ProductMinDTO> dto = service.findByCategoryName(categoryName, pageable);
+            return ResponseEntity.ok(dto);
+        }
+
+        Page<ProductMinDTO> dto = service.findAll(pageable);
         return ResponseEntity.ok(dto);
+
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
     public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){
         dto = service.insert(dto);
@@ -55,14 +68,14 @@ public class ProductController {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> update(@PathVariable Long id,@Valid @RequestBody ProductDTO dto){
         dto = service.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);

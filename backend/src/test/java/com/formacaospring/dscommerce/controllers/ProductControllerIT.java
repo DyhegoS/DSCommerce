@@ -39,8 +39,8 @@ public class ProductControllerIT {
 	private TokenUtil tokenUtil;
 
 	private Long existingProductId, nonExistingProductId, dependentProductId; 
-	private String usernameAdmin, usernameClient, passwordAdmin, passwordClient, tokenAdmin, tokenClient, invalidToken,
-			productName;
+	private String userSeller, userStock, userSellerPassword, userStockPassword, adminUsername, adminPassword;
+	private String userSellerToken, userStockToken, adminToken, invalidToken;
 	private Product product;
 	private ProductDTO productDTO;
 
@@ -51,27 +51,28 @@ public class ProductControllerIT {
 		nonExistingProductId = 100L;
 		dependentProductId = 3L;
 		
-		usernameAdmin = "alex@gmail.com";
-		passwordAdmin = "123456";
-		usernameClient = "maria@gmail.com";
-		passwordClient = "123456";
+		userSeller = "alex@gmail.com";
+		userSellerPassword = "123456";
+		userStock = "maria@gmail.com";
+		userStockPassword = "123456";
+		adminUsername = "admin@gmail.com";
+		adminPassword = "123456";
 		
-		productName = "Macbook Pro";
-		
-		tokenAdmin = tokenUtil.obtainAccessToken(mockMvc, usernameAdmin, passwordAdmin);
-		tokenClient = tokenUtil.obtainAccessToken(mockMvc, usernameClient, passwordClient);
-		invalidToken = tokenAdmin + "xpto";
+		userSellerToken = tokenUtil.obtainAccessToken(mockMvc, userSeller, userSellerPassword);
+		userStockToken = tokenUtil.obtainAccessToken(mockMvc, userStock, userStockPassword);
+		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
 		
 		Category category = new Category(2L, "Eletronics");
-		product = new Product(null, "Playstation 5", "blablablablablablablablablabla", 3000.0,
+		product = new Product(null, "Playstation 5", "blablablablablablablablablabla", 3000.0, 2,
 				"blablablablablablablablablabla");
 		product.getCategories().add(category);
 		productDTO = new ProductDTO(product);
 	}
 
 	@Test
-	public void findAllShouldReturnPageWhenNameParamIsEmpty() throws Exception {
+	public void findAllShouldReturnPageWhenNameParamIsEmptyWhenAdminLogged() throws Exception {
 		ResultActions result = mockMvc.perform(get("/products")
+				.header("Authorization", "Bearer " + adminToken)
 				.accept(MediaType.APPLICATION_JSON));
 		result.andExpect(status().isOk());
 		result.andExpect(jsonPath("$.content[0].id").value(1L));
@@ -82,9 +83,12 @@ public class ProductControllerIT {
 	}
 
 	@Test
-	public void findAllShouldReturnPageWhenNameParamIsNotEmpty() throws Exception {
+	public void findAllShouldReturnPageWhenNameParamIsNotEmptyWhenAdminLogged() throws Exception {
+		String productName = "Mac";
+		
 		ResultActions result = mockMvc
 				.perform(get("/products?name={productName}", productName)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 		result.andExpect(status().isOk());
 		result.andExpect(jsonPath("$.content[0].id").value(3L));
@@ -100,7 +104,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON))
@@ -124,7 +128,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -141,7 +145,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -158,7 +162,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -175,7 +179,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -192,7 +196,7 @@ public class ProductControllerIT {
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
-				.perform(post("/products").header("Authorization", "Bearer " + tokenAdmin)
+				.perform(post("/products").header("Authorization", "Bearer " + adminToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -201,12 +205,12 @@ public class ProductControllerIT {
 	}
 	
 	@Test
-	public void insertShouldReturnForbiddenWhenClientLogged() throws Exception{
+	public void insertShouldReturnForbiddenWhenSellerLogged() throws Exception{
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 
 		ResultActions result = mockMvc
 				.perform(post("/products")
-						.header("Authorization", "Bearer " + tokenClient)
+						.header("Authorization", "Bearer " + userSellerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
 						.accept(MediaType.APPLICATION_JSON));
@@ -232,7 +236,7 @@ public class ProductControllerIT {
 	public void deleteShouldReturnNoContentWhenIdExistsAndAdminLogged() throws Exception{
 		ResultActions result = mockMvc
 				.perform(delete("/products/{id}", existingProductId)
-						.header("Authorization", "Bearer " + tokenAdmin)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isNoContent());
@@ -242,7 +246,7 @@ public class ProductControllerIT {
 	public void deleteShouldReturnNotFoundWhenIdDoesNotExistsAndAdminLogged() throws Exception{
 		ResultActions result = mockMvc
 				.perform(delete("/products/{id}", nonExistingProductId)
-						.header("Authorization", "Bearer " + tokenAdmin)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isNotFound());
@@ -253,17 +257,17 @@ public class ProductControllerIT {
 	public void deleteShouldReturnBadRequestWhenIdIsDependentAndAdminLogged() throws Exception{
 		ResultActions result = mockMvc
 				.perform(delete("/products/{id}", dependentProductId)
-						.header("Authorization", "Bearer " + tokenAdmin)
+						.header("Authorization", "Bearer " + adminToken)
 						.accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isBadRequest());
 	}
 	
 	@Test
-	public void deleteShouldReturnForbiddenWhenIdExistsAndClientLogged() throws Exception{
+	public void deleteShouldReturnForbiddenWhenIdExistsAndUserStockLogged() throws Exception{
 		ResultActions result = mockMvc
 				.perform(delete("/products/{id}", existingProductId)
-						.header("Authorization", "Bearer " + tokenClient)
+						.header("Authorization", "Bearer " + userStockToken)
 						.accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isForbidden());

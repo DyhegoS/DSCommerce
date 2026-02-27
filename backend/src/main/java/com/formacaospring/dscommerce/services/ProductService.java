@@ -34,9 +34,21 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(Pageable pageable) {
+        Page<Product> result = repository.findAll(pageable);
+        return result.map(x -> new ProductMinDTO(x));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findByName(String name, Pageable pageable) {
         Page<Product> result = repository.searchByName(name, pageable);
         return result.map(x -> new ProductMinDTO(x));
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findByCategoryName(String categoryName, Pageable pageable){
+    	Page<Product> result = repository.searchByCategory(categoryName, pageable);
+    	return result.map(ProductMinDTO::new);
     }
 
     @Transactional
@@ -71,13 +83,13 @@ public class ProductService {
         catch(DataIntegrityViolationException e){
             throw new DatabaseException("Falha de integridade referencial!");
         }
-
     }
 
     private void copyDtoToentity(ProductDTO dto, Product entity) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
+        entity.setQuantity(dto.getQuantity());
         entity.setImgUrl(dto.getImgUrl());
         entity.getCategories().clear();
         for(CategoryDTO catDto : dto.getCategories()){

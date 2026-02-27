@@ -1,6 +1,5 @@
 package com.formacaospring.dscommerce.entities;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,15 +30,17 @@ public class User implements UserDetails{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	private String username;
 
 	@Column(unique = true)
 	private String email;
-	private String phone;
-	private LocalDate birthDate;
 	private String password;
 
-	@OneToMany(mappedBy = "client")	
+	@OneToMany(mappedBy = "user")
 	List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<Client> clients = new HashSet<>();
 
 	@ManyToMany
     @JoinTable(name = "tb_user_role",
@@ -50,13 +51,11 @@ public class User implements UserDetails{
 	public User(){
 	}
 	
-	public User(Long id, String name, String email, String phone, LocalDate birthDate, String password) {
-		super();
+	public User(Long id, String name, String username, String email, String password) {
 		this.id = id;
 		this.name = name;
+		this.username = username;
 		this.email = email;
-		this.phone = phone;
-		this.birthDate = birthDate;
 		this.password = password;
 	}
 
@@ -67,6 +66,7 @@ public class User implements UserDetails{
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 
 	public String getName() {
 		return name;
@@ -76,28 +76,17 @@ public class User implements UserDetails{
 		this.name = name;
 	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public LocalDate getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
 	}
 
 	public String getPassword() {
@@ -112,7 +101,11 @@ public class User implements UserDetails{
 		return orders;
 	}
 
-	public Set<Role> getRoles() {
+    public Set<Client> getClients() {
+        return clients;
+    }
+
+    public Set<Role> getRoles() {
 		return roles;
 	}
 
@@ -131,7 +124,7 @@ public class User implements UserDetails{
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, name);
+		return Objects.hash(id, username);
 	}
 
 	@Override
@@ -143,7 +136,7 @@ public class User implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(id, other.id) && Objects.equals(name, other.name);
+		return Objects.equals(id, other.id) && Objects.equals(username, other.username);
 	}
 
 	@Override

@@ -25,19 +25,22 @@ public class UserControllerIT {
 	@Autowired
 	private TokenUtil tokenUtil;
 	
-	private String clientUsername, clientPassword, adminUsername, adminPassword;
-	private String clientToken, adminToken, invalidToken;
+	private String sellerUsername, sellerPassword, stockUsername, stockPassword, adminUsername, adminPassword;
+	private String sellerToken, adminToken, stockToken, invalidToken;
 	
 	@BeforeEach
 	void setUp() throws Exception {
 		
-		clientUsername = "maria@gmail.com";
-		clientPassword = "123456";
-		adminUsername = "alex@gmail.com";
+		sellerUsername = "jaja24@gmail.com";
+		sellerPassword = "123456";
+		stockUsername = "maria@gmail.com";
+		stockPassword = "123456";
+		adminUsername = "admin@gmail.com";
 		adminPassword = "123456";
 				
-		clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
+		sellerToken = tokenUtil.obtainAccessToken(mockMvc, sellerUsername, sellerPassword);
 		adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
+		stockToken = tokenUtil.obtainAccessToken(mockMvc, stockUsername, stockPassword);
 		invalidToken = adminToken + "xpto"; // Simulates a wrong token
 	}
 	
@@ -50,28 +53,39 @@ public class UserControllerIT {
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
-		result.andExpect(jsonPath("$.id").value(2L));
-		result.andExpect(jsonPath("$.name").value("Alex Green"));
-		result.andExpect(jsonPath("$.email").value("alex@gmail.com"));
-		result.andExpect(jsonPath("$.phone").value("977777777"));	
-		result.andExpect(jsonPath("$.birthDate").value("1987-12-13"));		
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.username").value("admin@gmail.com"));
+		result.andExpect(jsonPath("$.email").value("admin@gmail.com"));		
 		result.andExpect(jsonPath("$.roles").exists());
 	}
 	
 	@Test
-	public void getMeShouldReturnUserDTOWhenClientLogged() throws Exception {
+	public void getMeShouldReturnUserDTOWhenSellerLogged() throws Exception {
 		
 		ResultActions result = 
 				mockMvc.perform(get("/users/me")
-					.header("Authorization", "Bearer " + clientToken)
+					.header("Authorization", "Bearer " + sellerToken)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
-		result.andExpect(jsonPath("$.id").value(1L));
-		result.andExpect(jsonPath("$.name").value("Maria Brown"));
-		result.andExpect(jsonPath("$.email").value("maria@gmail.com"));
-		result.andExpect(jsonPath("$.phone").value("988888888"));	
-		result.andExpect(jsonPath("$.birthDate").value("2001-07-25"));		
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.username").value("jaja24@gmail.com"));
+		result.andExpect(jsonPath("$.email").value("jaja24@gmail.com"));	
+		result.andExpect(jsonPath("$.roles").exists());
+	}
+	
+	@Test
+	public void getMeShouldReturnUserDTOWhenUserStockLogged() throws Exception {
+		
+		ResultActions result = 
+				mockMvc.perform(get("/users/me")
+					.header("Authorization", "Bearer " + stockToken)
+					.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.username").value("maria@gmail.com"));
+		result.andExpect(jsonPath("$.email").value("maria@gmail.com"));		
 		result.andExpect(jsonPath("$.roles").exists());
 	}
 	

@@ -22,13 +22,13 @@ public class AuthServiceTests {
 	@Mock
 	private UserService userService;
 
-	private User admin, selfClient, otherClient;
+	private User admin, userSeller, UserStock;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		admin = UserFactory.createAdminUser();
-		selfClient = UserFactory.createCustomClientUser(1L, "Bob");
-		otherClient = UserFactory.createCustomClientUser(2L, "Ana");
+		userSeller = UserFactory.createSellerUser();
+		UserStock = UserFactory.createStockUser();
 	}
 
 	@Test
@@ -43,10 +43,10 @@ public class AuthServiceTests {
 	}
 
 	@Test
-	public void validateSelfOrAdminShouldDoNothingWhenSelfClientLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(selfClient);
+	public void validateSelfOrAdminShouldDoNothingWhenSellerLogged() {
+		Mockito.when(userService.authenticated()).thenReturn(userSeller);
 
-		Long userId = selfClient.getId();
+		Long userId = userSeller.getId();
 
 		Assertions.assertDoesNotThrow(() -> {
 			service.validateSelfOrAdmin(userId);
@@ -54,10 +54,10 @@ public class AuthServiceTests {
 	}
 	
 	@Test
-	public void validateSelfOrAdminShouldThrowsForbiddenExceptionWhenOtherClientLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(selfClient);
+	public void validateSelfOrAdminShouldThrowsForbiddenExceptionWhenUserStockLogged() {
+		Mockito.when(userService.authenticated()).thenReturn(UserStock);
 		
-		Long userId = otherClient.getId();
+		Long userId = userSeller.getId();
 		
 		Assertions.assertThrows(ForbiddenException.class, () -> {
 			service.validateSelfOrAdmin(userId);

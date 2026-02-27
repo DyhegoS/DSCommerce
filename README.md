@@ -9,7 +9,7 @@ Consiste em uma aplicação simples que realiza a criação, leitura, atualizaç
 de acessos. O sistema conta com testes unitários e de integração das funções citadas.
 
 # 📋 Modelo conceitual
-![Modelo Conceitual](https://github.com/DyhegoS/DSCommerce/blob/main/assets/modeloconceitual.png)
+![Modelo Conceitual](https://github.com/DyhegoS/DSCommerce/blob/main/backend/assets/modeloconceitual.png)
 
 #  🛠️ Tecnologias Utilizadas
 - Java

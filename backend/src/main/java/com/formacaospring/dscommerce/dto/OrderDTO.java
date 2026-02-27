@@ -13,8 +13,11 @@ import jakarta.validation.constraints.NotEmpty;
 public class OrderDTO {
     private Long id;
     private Instant moment;
+    private Instant updateMoment;
     private OrderStatus status;
 
+    private UserDTO user;
+    private UserDTO userUpdate;
     private ClientDTO client;
 
     private PaymentDTO payment;
@@ -25,10 +28,12 @@ public class OrderDTO {
     public OrderDTO(){
     }
 
-    public OrderDTO(Long id, Instant moment, OrderStatus status, ClientDTO client, PaymentDTO payment) {
+    public OrderDTO(Long id, Instant moment, Instant updateMoment, OrderStatus status, UserDTO user, UserDTO userUpdate, ClientDTO client, PaymentDTO payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
+        this.user = user;
+        this.userUpdate = userUpdate;
         this.client = client;
         this.payment = payment;
     }
@@ -36,7 +41,10 @@ public class OrderDTO {
      public OrderDTO(Order entity) {
         id = entity.getId();
         moment = entity.getMoment();
+        updateMoment = entity.getUpdateMoment();
         status = entity.getStatus();
+        user = new UserDTO(entity.getUser());
+        userUpdate = new UserDTO(entity.getUserUpdate());
         client = new ClientDTO(entity.getClient());
         payment = (entity.getPayment() == null) ? null : new PaymentDTO(entity.getPayment());
         for(OrderItem item : entity.getItems()){
@@ -53,15 +61,27 @@ public class OrderDTO {
          return moment;
      }
 
-     public OrderStatus getStatus() {
+    public Instant getUpdateMoment() {
+        return updateMoment;
+    }
+
+    public OrderStatus getStatus() {
          return status;
      }
 
-     public ClientDTO getClient() {
-         return client;
+     public UserDTO getUser() {
+         return user;
      }
 
-     public PaymentDTO getPayment() {
+    public UserDTO getUserUpdate() {
+        return userUpdate;
+    }
+
+    public ClientDTO getClient() {
+		return client;
+	}
+
+	 public PaymentDTO getPayment() {
          return payment;
      }
 

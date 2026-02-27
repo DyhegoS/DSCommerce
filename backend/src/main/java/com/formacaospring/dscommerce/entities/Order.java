@@ -27,11 +27,19 @@ public class Order {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
+    
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updateMoment;
+    
     private OrderStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "client_id")
-    private User client;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "user_update_id", nullable = true)
+    private User userUpdate;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
@@ -39,15 +47,22 @@ public class Order {
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     public Order(){
     }
 
-    public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
+    public Order(Long id, Instant moment, Instant updateMoment, OrderStatus status, User user, User userUpdate, Payment payment, Client client) {
         this.id = id;
         this.moment = moment;
+        this.updateMoment = updateMoment;
         this.status = status;
-        this.client = client;
+        this.user = user;
+        this.userUpdate = userUpdate;
         this.payment = payment;
+        this.client = client;
     }
 
     public Long getId() {
@@ -66,7 +81,15 @@ public class Order {
         this.moment = moment;
     }
 
-    public OrderStatus getStatus() {
+    public Instant getUpdateMoment() {
+		return updateMoment;
+	}
+
+	public void setUpdateMoment(Instant updateMoment) {
+		this.updateMoment = updateMoment;
+	}
+
+	public OrderStatus getStatus() {
         return status;
     }
 
@@ -74,12 +97,20 @@ public class Order {
         this.status = status;
     }
 
-    public User getClient() {
-        return client;
+    public User getUser() {
+        return user;
     }
 
-    public void setClient(User client) {
-        this.client = client;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUserUpdate() {
+        return userUpdate;
+    }
+
+    public void setUserUpdate(User userUpdate) {
+        this.userUpdate = userUpdate;
     }
 
     public Payment getPayment() {
@@ -88,6 +119,14 @@ public class Order {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Set<OrderItem> getItems() {

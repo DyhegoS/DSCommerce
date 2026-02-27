@@ -22,6 +22,10 @@ public class ProductDTO {
     @NotNull(message = "Campo requerido!")
     @Positive(message = "O preço deve ser positivo")
     private Double price;
+    
+    @NotNull(message = "Campo requerido!")
+    @Positive(message = "A quantidade deve ser positiva")
+    private Integer quantity;
     private String imgUrl;
 
     @NotEmpty(message = "Deve ter pelo menos uma categoria")
@@ -30,11 +34,12 @@ public class ProductDTO {
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
+    public ProductDTO(Long id, String name, String description, Double price, Integer quantity, String imgUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.quantity = quantity;
         this.imgUrl = imgUrl;
     }
 
@@ -43,6 +48,7 @@ public class ProductDTO {
         name = entity.getName();
         description = entity.getDescription();
         price = entity.getPrice();
+        quantity = entity.getQuantity();
         imgUrl = entity.getImgUrl();
         for(Category cat : entity.getCategories()){
             categories.add(new CategoryDTO(cat));
@@ -64,8 +70,12 @@ public class ProductDTO {
     public Double getPrice() {
         return price;
     }
+    
+    public Integer getQuantity() {
+		return quantity;
+	}
 
-    public String getImgUrl() {
+	public String getImgUrl() {
         return imgUrl;
     }
 
