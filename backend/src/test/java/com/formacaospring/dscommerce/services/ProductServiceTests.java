@@ -1,13 +1,10 @@
 package com.formacaospring.dscommerce.services;
 
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.dto.ProductMinDTO;
-import com.formacaospring.dscommerce.entities.Product;
-import com.formacaospring.dscommerce.repositories.ProductRepository;
-import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
-import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
-import com.formacaospring.dscommerce.tests.ProductFactory;
-import jakarta.persistence.EntityNotFoundException;
+import static org.mockito.ArgumentMatchers.any;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,10 +19,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-import java.util.Optional;
+import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.repositories.ProductRepository;
+import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
+import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+import com.formacaospring.dscommerce.tests.ProductFactory;
 
-import static org.mockito.ArgumentMatchers.any;
+import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
@@ -51,7 +52,6 @@ public class ProductServiceTests {
         productDTO = ProductFactory.createProductDTO();
         page = new PageImpl<>(List.of(product));
 
-        Mockito.when(repository.searchByName(any(), (Pageable)any())).thenReturn(page);
         Mockito.when(repository.findById(existingProductId)).thenReturn(Optional.of(product));
         Mockito.when(repository.findById(nonExistingProductId)).thenReturn(Optional.empty());
 
@@ -88,7 +88,7 @@ public class ProductServiceTests {
     public void findAllShouldPagedReturnProductMinDTO() {
         Pageable pageable = PageRequest.of(0, 12);
 
-        Page<ProductMinDTO> result = service.findAll(pageable);
+        Page<ProductDTO> result = service.findAllPaged(pageable);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.getSize(), 1);

@@ -1,24 +1,28 @@
 package com.formacaospring.dscommerce.services;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.formacaospring.dscommerce.dto.CategoryDTO;
+import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.entities.Category;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.projections.ProductProjection;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
 import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+import com.formacaospring.dscommerce.util.Utils;
 
 import jakarta.persistence.EntityNotFoundException;
-
-import com.formacaospring.dscommerce.dto.CategoryDTO;
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.dto.ProductMinDTO;
-import com.formacaospring.dscommerce.entities.Category;
-import com.formacaospring.dscommerce.entities.Product;
 
 @Service
 public class ProductService {
@@ -34,22 +38,29 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(Pageable pageable) {
-        Page<Product> result = repository.findAll(pageable);
-        return result.map(x -> new ProductMinDTO(x));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findByName(String name, Pageable pageable) {
-        Page<Product> result = repository.searchByName(name, pageable);
-        return result.map(x -> new ProductMinDTO(x));
-    }
+	public Page<ProductDTO> findAllPaged(Pageable pageable) {
+		Page<Product> list = repository.findAll(pageable);
+		return list.map(x -> new ProductDTO(x));
+	}
     
+    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findByCategoryName(String categoryName, Pageable pageable){
-    	Page<Product> result = repository.searchByCategory(categoryName, pageable);
-    	return result.map(ProductMinDTO::new);
-    }
+	public Page<ProductDTO> findAllPaged(String name, String categoryId, Pageable pageable) {
+    	
+    	List<Long> categoryIds = Arrays.asList();
+    	if(!"0".equals(categoryId)) {
+    		categoryIds = Arrays.asList(categoryId.split(",")).stream().map(Long::parseLong).toList();
+    	}
+    			 			
+		Page<ProductProjection> page = repository.searchProducts(categoryIds, name, pageable);
+        List<Long> productIds = page.map(x -> x.getId()).toList();
+
+        List<Product> entities = repository.searchProductWithCategories(productIds);
+        entities = (List<Product>) Utils.replace(page.getContent(), entities);
+        List<ProductDTO> dtos = entities.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
+
+        return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
+	} 
 
     @Transactional
     public ProductDTO insert(ProductDTO dto) {

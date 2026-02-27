@@ -1,11 +1,17 @@
 package com.formacaospring.dscommerce.dto;
 
-import com.formacaospring.dscommerce.entities.Category;
-import com.formacaospring.dscommerce.entities.Product;
-import jakarta.validation.constraints.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import com.formacaospring.dscommerce.entities.Category;
+import com.formacaospring.dscommerce.entities.Product;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
@@ -50,10 +56,12 @@ public class ProductDTO {
         price = entity.getPrice();
         quantity = entity.getQuantity();
         imgUrl = entity.getImgUrl();
-        for(Category cat : entity.getCategories()){
-            categories.add(new CategoryDTO(cat));
-        }
     }
+    
+    public ProductDTO(Product entity, Set<Category> categories) {
+		this(entity);
+		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+	}
 
     public Long getId() {
         return id;

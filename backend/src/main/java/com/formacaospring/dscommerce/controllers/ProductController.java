@@ -1,16 +1,5 @@
 package com.formacaospring.dscommerce.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.dto.ProductMinDTO;
-import com.formacaospring.dscommerce.services.ProductService;
-
-import jakarta.validation.Valid;
-
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.services.ProductService;
+
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -42,23 +40,13 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping
-    public ResponseEntity<Page<ProductMinDTO>> findAll(
-        @RequestParam(defaultValue = "") String name,
-        @RequestParam(defaultValue = "") String categoryName,
-        Pageable pageable){
-
-        if(!name.isEmpty() && categoryName.isEmpty()){
-            Page<ProductMinDTO> dto = service.findByName(name, pageable);
-            return ResponseEntity.ok(dto);
-        }else if(name.isEmpty() && !categoryName.isEmpty()){
-            Page<ProductMinDTO> dto = service.findByCategoryName(categoryName, pageable);
-            return ResponseEntity.ok(dto);
-        }
-
-        Page<ProductMinDTO> dto = service.findAll(pageable);
-        return ResponseEntity.ok(dto);
-
-    }
+	public ResponseEntity<Page<ProductDTO>> findAll(
+			@RequestParam(defaultValue = "")String name,
+			@RequestParam(defaultValue = "0")String categoryId,
+			Pageable pageable){
+		Page<ProductDTO> list = service.findAllPaged(name, categoryId, pageable);
+        return ResponseEntity.ok().body(list);
+	}
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
