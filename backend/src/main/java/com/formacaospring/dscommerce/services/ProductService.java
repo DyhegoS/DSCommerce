@@ -1,6 +1,5 @@
 package com.formacaospring.dscommerce.services;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import com.formacaospring.dscommerce.dto.ProductDTO;
 import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.projections.ProductProjection;
+import com.formacaospring.dscommerce.repositories.CategoryRepository;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
 import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
@@ -29,6 +29,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+    
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
@@ -45,14 +48,13 @@ public class ProductService {
     
     @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(String name, String categoryId, Pageable pageable) {
+	public Page<ProductDTO> findAllPaged(String name, String categoryName, Pageable pageable) {
     	
-    	List<Long> categoryIds = Arrays.asList();
-    	if(!"0".equals(categoryId)) {
-    		categoryIds = Arrays.asList(categoryId.split(",")).stream().map(Long::parseLong).toList();
-    	}
+    	List<Category> catNames = categoryRepository.searchByName(categoryName);
+    	List<Long> categoryIds = catNames.stream().map(x -> x.getId()).toList();
     			 			
 		Page<ProductProjection> page = repository.searchProducts(categoryIds, name, pageable);
+		
         List<Long> productIds = page.map(x -> x.getId()).toList();
 
         List<Product> entities = repository.searchProductWithCategories(productIds);
