@@ -5,7 +5,7 @@ import { BaseUi } from './_components/base-ui/base-ui';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginPage, BaseUi],
+  imports: [RouterOutlet, BaseUi],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

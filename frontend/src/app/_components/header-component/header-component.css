@@ -1,0 +1,49 @@
+.header{
+  display: flex;
+  height: 60px;
+  width: 100%;
+  box-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.205);
+  box-sizing: border-box;
+  justify-content: space-between;
+  position: fixed;
+}
+
+.search-box {
+  position: relative;
+  margin-left: 30px;
+  width: 250px;
+  padding: 10px 0 10px 0;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 30px;
+
+}
+
+.search-box i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-55%);
+  cursor: pointer;
+}
+
+.profile{
+  display: flex;
+  padding: 0 15px;
+  align-items: center;
+  gap: 12px;
+  border-left:1px solid #ddd;
+  border-right:1px solid #ddd;
+  margin-right: 20px;
+}
+
+.profile img{
+  height: 80%;
+  border-radius: 50%;
+}
+
+.profile-name-title{
+  text-align: center;
+}

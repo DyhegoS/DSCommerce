@@ -26,6 +26,13 @@
 .left-login h1{
   font-size: 3vw;
   color: #77ffc0;
+  text-align: center;
+}
+
+.left-login p{
+  font-size: 1vw;
+  color: #77ffc0;
+  text-align: center;
 }
 
 .left-login-img{
