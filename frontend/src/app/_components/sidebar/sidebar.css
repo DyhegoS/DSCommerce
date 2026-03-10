@@ -1,6 +1,6 @@
 .sidebar {
   width: 80px;
-  background-color: #f8f9fa;
+  background-color: #25343F;
   border-right: 1px solid #e9ecef;
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
 .mobile-toggle span {
   width: 100%;
   height: 2px;
-  background-color: blueviolet;
+  background-color: #BFC9D1;
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -80,14 +80,14 @@
 
 .nav-link:hover {
   background-color: rgba(138, 43, 226, 0.08);
-  color: blueviolet;
-  border-left-color: blueviolet;
+  color: #EAEFEF;
+  border-left-color: #BFC9D1;
 }
 
 .nav-link.active {
   background-color: rgba(138, 43, 226, 0.15);
-  color: blueviolet;
-  border-left-color: blueviolet;
+  color: #EAEFEF;
+  border-left-color: #BFC9D1;
   font-weight: 600;
 }
 
@@ -114,7 +114,7 @@
 }
 
 /* Scrollbar Styling */
-.sidebar::-webkit-scrollbar {
+/* .sidebar::-webkit-scrollbar {
   width: 6px;
 }
 
@@ -129,7 +129,7 @@
 
 .sidebar::-webkit-scrollbar-thumb:hover {
   background: rgba(138, 43, 226, 0.5);
-}
+} */
 
 /* Responsive Design */
 @media (max-width: 768px) {

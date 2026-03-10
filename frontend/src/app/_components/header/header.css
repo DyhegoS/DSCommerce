@@ -5,7 +5,7 @@ header {
   align-items: center;
   padding: 0.75rem 1.5rem;
   box-shadow: 0 2px 12px rgba(138, 43, 226, 0.08);
-  background-color: #fff;
+  background-color: #FF9B51;
   gap: 1.5rem;
   min-height: 70px;
   font-family: 'Inter', sans-serif;
@@ -26,7 +26,7 @@ header {
 .header-left h1 {
   margin: 0;
   font-size: 1.25rem;
-  color: blueviolet;
+  color: #25343F;
   white-space: nowrap;
 }
 
