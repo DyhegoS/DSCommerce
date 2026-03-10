@@ -1,28 +1,64 @@
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Descrição</th>
-      <th>Preço</th>
-      <th>Imagem</th>
-      <th>Quantidade</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-    <td>1</td>
-    <td>Bota</td>
-    <td>Bota legal</td>
-    <td>190,00</td>
-    <td>Imagem</td>
-    <td>5</td>
-    <td>
-      <button class="edit">Editar</button>
-      <button class="delete">Excluir</button>
-    </td>
-  </tr>
-  </tbody>
+<div class="products-container">
+  <div class="products-header">
+    <h1>Produtos</h1>
+    <button class="btn-add">+ Novo Produto</button>
+  </div>
 
-</table>
+  <div class="products-content">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Descrição</th>
+          <th>Preço</th>
+          <th>Quantidade</th>
+          <th>Imagem</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products" class="product-row">
+          <td class="id">{{ product.id }}</td>
+          <td class="name">{{ product.name }}</td>
+          <td class="description">{{ product.description }}</td>
+          <td class="price">{{ formatCurrency(product.price) }}</td>
+          <td class="quantity">{{ product.quantity }}</td>
+          <td class="image">
+            <button
+              class="btn-image"
+              (click)="openImage(product.imageUrl)"
+              title="Clique para visualizar"
+            >
+              Ver Imagem
+            </button>
+          </td>
+          <td class="actions">
+            <button
+              class="btn-edit"
+              (click)="editProduct(product)"
+              title="Editar produto"
+            >
+              ✎ Editar
+            </button>
+            <button
+              class="btn-delete"
+              (click)="deleteProduct(product.id)"
+              title="Deletar produto"
+            >
+              🗑 Deletar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de Imagem -->
+  <div *ngIf="selectedImageUrl" class="image-modal" (click)="closeImage()">
+    <div class="image-modal-content" (click)="$event.stopPropagation()">
+      <button class="btn-close" (click)="closeImage()">✕</button>
+      <img [src]="selectedImageUrl" alt="Imagem do Produto" class="modal-image" />
+    </div>
+  </div>
+</div>

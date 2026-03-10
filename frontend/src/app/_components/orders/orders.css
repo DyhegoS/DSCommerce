@@ -1,0 +1,404 @@
+.orders-container {
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.orders-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.orders-header h1 {
+  margin: 0;
+  color: blueviolet;
+  font-size: 2rem;
+}
+
+.orders-content {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.orders-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.orders-table th {
+  padding: 1.25rem;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.order-row {
+  border-bottom: 1px solid #e9ecef;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.order-row:hover {
+  background-color: #f8f9fa;
+}
+
+.orders-table td {
+  padding: 1.25rem;
+  color: #495057;
+}
+
+.id {
+  font-weight: 600;
+  color: blueviolet;
+  min-width: 80px;
+}
+
+.date {
+  min-width: 120px;
+}
+
+.status,
+.payment-status {
+  text-align: center;
+  min-width: 130px;
+}
+
+.user {
+  min-width: 150px;
+}
+
+.items-count {
+  text-align: center;
+  min-width: 120px;
+}
+
+.actions {
+  text-align: center;
+  min-width: 150px;
+}
+
+/* Badges */
+.badge {
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+}
+
+.status-separacao {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-enviado {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-cancelado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.payment-paid {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.payment-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.payment-canceled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Botões */
+.btn-items,
+.btn-details {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-items {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-items:hover {
+  background-color: #138496;
+  transform: translateY(-2px);
+}
+
+.btn-details {
+  background-color: #0084ff;
+  color: white;
+}
+
+.btn-details:hover {
+  background-color: #0070dd;
+  transform: translateY(-2px);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 12px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: blueviolet;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.btn-close:hover {
+  color: #000;
+}
+
+.modal-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.order-info-section h3,
+.order-items-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.75rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-item label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-item span {
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.info-item .total {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.items-table thead {
+  background-color: #e9ecef;
+}
+
+.items-table th {
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.85rem;
+}
+
+.items-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.item-row:last-child td {
+  border-bottom: none;
+}
+
+.items-table tfoot {
+  background-color: #fff8e1;
+}
+
+.total-label {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+}
+
+.total-value {
+  font-weight: 600;
+  color: #28a745;
+  font-size: 1.1rem;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-primary {
+  padding: 0.75rem 1.5rem;
+  background-color: blueviolet;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #7620d5;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .orders-table,
+  .items-table {
+    font-size: 0.85rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.75rem;
+  }
+
+  .user {
+    display: none;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    max-width: 95vw;
+  }
+}
+
+@media (max-width: 480px) {
+  .orders-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .date,
+  .status,
+  .payment-status {
+    display: none;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+}

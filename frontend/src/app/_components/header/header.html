@@ -1,0 +1,38 @@
+<header>
+  <div class="header-left">
+    <img src="logo.png" alt="logo" class="logo">
+    <h1>Reize Commerce</h1>
+  </div>
+
+  <div class="header-center">
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Pesquisar..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+      />
+      <svg
+        class="search-icon"
+        width="20"
+        height="20"
+        viewBox="0 0 256 256"
+        (click)="onSearch()"
+      >
+        <circle cx="116" cy="116" r="84" fill="none" stroke="currentColor" stroke-width="24"></circle>
+        <line x1="175.4" y1="175.4" x2="224" y2="224" stroke="currentColor" stroke-width="24" stroke-linecap="round"></line>
+      </svg>
+    </div>
+  </div>
+
+  <div class="header-right">
+    <div class="user-info">
+      <div class="user-details">
+        <p class="user-name">{{ user.name }}</p>
+        <p class="user-role">{{ user.role }}</p>
+      </div>
+      <img [src]="user.avatar" alt="avatar do usuário" class="user-avatar" />
+    </div>
+  </div>
+</header>
