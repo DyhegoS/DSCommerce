@@ -13,7 +13,7 @@
 
 .orders-header h1 {
   margin: 0;
-  color: blueviolet;
+  color: #25343F;
   font-size: 2rem;
 }
 
@@ -55,13 +55,12 @@
 }
 
 .orders-table td {
-  padding: 1.25rem;
+  padding: 5px;
   color: #495057;
 }
 
 .id {
   font-weight: 600;
-  color: blueviolet;
   min-width: 80px;
 }
 
@@ -89,7 +88,6 @@
   min-width: 150px;
 }
 
-/* Badges */
 .badge {
   padding: 0.5rem 0.75rem;
   border-radius: 20px;
@@ -129,7 +127,6 @@
   color: #721c24;
 }
 
-/* Botões */
 .btn-items,
 .btn-details {
   padding: 0.5rem 1rem;
@@ -162,7 +159,6 @@
   transform: translateY(-2px);
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;

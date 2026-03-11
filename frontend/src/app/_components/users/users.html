@@ -24,12 +24,15 @@
             <span [class]="'badge ' + getRole(user.role)">
               {{ user.role }}</span> </td>
           <td class="actions">
+
             <button
               class="btn-edit"
               (click)="editUser(user)"
               title="Editar usuário"
+
             >
-              ✏️ Editar
+            <i class="ph ph-pencil-simple-line"></i>
+            Editar
             </button>
             <button
               class="btn-delete"

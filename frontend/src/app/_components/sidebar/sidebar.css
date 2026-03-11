@@ -114,7 +114,7 @@
 }
 
 /* Scrollbar Styling */
-/* .sidebar::-webkit-scrollbar {
+.sidebar::-webkit-scrollbar {
   width: 6px;
 }
 
@@ -129,7 +129,7 @@
 
 .sidebar::-webkit-scrollbar-thumb:hover {
   background: rgba(138, 43, 226, 0.5);
-} */
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {

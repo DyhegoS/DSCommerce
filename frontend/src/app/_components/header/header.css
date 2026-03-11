@@ -18,11 +18,6 @@ header {
   flex-shrink: 0;
 }
 
-.header-left img.logo {
-  height: 40px;
-  width: auto;
-}
-
 .header-left h1 {
   margin: 0;
   font-size: 1.25rem;
@@ -56,8 +51,8 @@ header {
 }
 
 .search-input:focus {
-  border-color: blueviolet;
-  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.1);
+  border-color: #25343F;
+  box-shadow: 0 0 0 2px rgba(37, 52, 63, 0.1);
 }
 
 .search-icon {
@@ -70,7 +65,7 @@ header {
 }
 
 .search-icon:hover {
-  color: blueviolet;
+  color: #25343F;
 }
 
 .header-right {
