@@ -91,9 +91,8 @@
   font-weight: 600;
 }
 
-.nav-icon {
-  width: 24px;
-  height: 24px;
+.nav-link i {
+  font-size: 20px;
   flex-shrink: 0;
   color: inherit;
 }

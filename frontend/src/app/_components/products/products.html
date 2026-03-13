@@ -1,7 +1,9 @@
 <div class="products-container">
   <div class="products-header">
     <h1>Produtos</h1>
-    <button class="btn-add">+ Novo Produto</button>
+    <button class="btn-add">
+      <i class="ph ph-plus"></i>
+      Novo Produto</button>
   </div>
 
   <div class="products-content">
@@ -19,11 +21,11 @@
       </thead>
       <tbody>
         <tr *ngFor="let product of products" class="product-row">
-          <td class="id">{{ product.id }}</td>
-          <td class="name">{{ product.name }}</td>
+          <td class="id fw-bold">{{ product.id }}</td>
+          <td class="name fw-bold">{{ product.name }}</td>
           <td class="description">{{ product.description }}</td>
-          <td class="price">{{ formatCurrency(product.price) }}</td>
-          <td class="quantity">{{ product.quantity }}</td>
+          <td class="price fw-bold text-success">{{ formatCurrency(product.price) }}</td>
+          <td class="quantity text-center">{{ product.quantity }}</td>
           <td class="image">
             <button
               class="btn-image"
@@ -47,7 +49,8 @@
               (click)="deleteProduct(product.id)"
               title="Deletar produto"
             >
-              🗑 Deletar
+            <i class="ph ph-trash"></i>
+              Deletar
             </button>
           </td>
         </tr>

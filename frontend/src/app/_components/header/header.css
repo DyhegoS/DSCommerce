@@ -108,14 +108,12 @@ header {
 
 @media (max-width: 768px) {
   header {
-    flex-wrap: wrap;
     gap: 1rem;
   }
 
   .header-center {
-    order: 3;
-    flex-basis: 100%;
-    max-width: 100%;
+    flex-basis: auto;
+    max-width: auto;
   }
 
   .header-left h1 {
