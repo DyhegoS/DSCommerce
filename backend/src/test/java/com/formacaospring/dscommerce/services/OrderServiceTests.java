@@ -1,10 +1,16 @@
 package com.formacaospring.dscommerce.services;
 
-import static org.mockito.ArgumentMatchers.any;
-
-import java.util.ArrayList;
-import java.util.Optional;
-
+import com.formacaospring.dscommerce.dto.OrderDTO;
+import com.formacaospring.dscommerce.entities.*;
+import com.formacaospring.dscommerce.repositories.OrderItemRepository;
+import com.formacaospring.dscommerce.repositories.OrderRepository;
+import com.formacaospring.dscommerce.repositories.ProductRepository;
+import com.formacaospring.dscommerce.services.exceptions.ForbiddenException;
+import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+import com.formacaospring.dscommerce.tests.OrderFactory;
+import com.formacaospring.dscommerce.tests.ProductFactory;
+import com.formacaospring.dscommerce.tests.UserFactory;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,22 +21,10 @@ import org.mockito.Mockito;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.formacaospring.dscommerce.dto.OrderDTO;
-import com.formacaospring.dscommerce.entities.Client;
-import com.formacaospring.dscommerce.entities.Order;
-import com.formacaospring.dscommerce.entities.OrderItem;
-import com.formacaospring.dscommerce.entities.Product;
-import com.formacaospring.dscommerce.entities.User;
-import com.formacaospring.dscommerce.repositories.OrderItemRepository;
-import com.formacaospring.dscommerce.repositories.OrderRepository;
-import com.formacaospring.dscommerce.repositories.ProductRepository;
-import com.formacaospring.dscommerce.services.exceptions.ForbiddenException;
-import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
-import com.formacaospring.dscommerce.tests.OrderFactory;
-import com.formacaospring.dscommerce.tests.ProductFactory;
-import com.formacaospring.dscommerce.tests.UserFactory;
+import java.util.ArrayList;
+import java.util.Optional;
 
-import jakarta.persistence.EntityNotFoundException;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 public class OrderServiceTests {
@@ -125,7 +119,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldOrderDTOWhenAdminLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(admin);
+		Mockito.when(authService.authenticated()).thenReturn(admin);
 		
 		OrderDTO result = service.insert(orderDTO);
 		
@@ -134,7 +128,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldOrderDTOWhenClientLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(seller);
+		Mockito.when(authService.authenticated()).thenReturn(seller);
 		
 		OrderDTO result = service.insert(orderDTO);
 		
@@ -143,7 +137,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldThrowUsernameNotFoundExceptionWhenUserNotLogged() {
-		Mockito.doThrow(UsernameNotFoundException.class).when(userService).authenticated();
+		Mockito.doThrow(UsernameNotFoundException.class).when(authService).authenticated();
 		
 		order.setUser(new User());
 		orderDTO = new OrderDTO(order);
@@ -155,7 +149,7 @@ public class OrderServiceTests {
 	
 	@Test
 	public void insertShouldThrowEntityNotFoundExceptionWhenOrderProductIdDoesNotExist() {
-		Mockito.when(userService.authenticated()).thenReturn(seller);
+		Mockito.when(authService.authenticated()).thenReturn(seller);
 		
 		product.setId(nonExistingProductId);
 		OrderItem orderItem = new OrderItem(order, product, 2, 10.0);
