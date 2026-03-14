@@ -1,0 +1,12 @@
+.home-container{
+  font-family: 'Roboto', sans-serif;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-header {
+  color: #25343F;
+}
+

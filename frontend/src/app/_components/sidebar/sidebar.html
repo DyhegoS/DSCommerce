@@ -1,0 +1,59 @@
+<aside class="sidebar" [class.mobile-open]="isMobileOpen">
+  <button class="mobile-toggle" (click)="toggleMobile()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a
+          routerLink="/home"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+          class="nav-link"
+        >
+          <i class="ph ph-house"></i>
+          <span class="nav-label">Home</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          routerLink="/products"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+          class="nav-link"
+        >
+          <i class="ph ph-shopping-cart"></i>
+          <span class="nav-label">Produtos</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          routerLink="/orders"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+          class="nav-link"
+        >
+          <i class="ph ph-list-dashes"></i>
+          <span class="nav-label">Pedidos</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a
+          routerLink="/users"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+          class="nav-link"
+        >
+          <i class="ph ph-users"></i>
+          <span class="nav-label">Usuários</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
