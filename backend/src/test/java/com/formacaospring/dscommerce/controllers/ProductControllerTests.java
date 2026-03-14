@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formacaospring.dscommerce.dto.ProductDTO;
 import com.formacaospring.dscommerce.dto.ProductMinDTO;
 import com.formacaospring.dscommerce.entities.Product;
@@ -32,7 +33,6 @@ import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundExcepti
 import com.formacaospring.dscommerce.tests.ProductFactory;
 import com.formacaospring.dscommerce.tests.TokenUtil;
 import com.formacaospring.dscommerce.tests.UserFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,7 +61,7 @@ public class ProductControllerTests {
 	private Product product;
 	private ProductDTO productDTO;
 	private ProductMinDTO productMinDTO;
-	private PageImpl<ProductMinDTO> page;
+	private PageImpl<ProductDTO> page;
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -89,9 +89,9 @@ public class ProductControllerTests {
 		productDTO = new ProductDTO(product);
 		productMinDTO = new ProductMinDTO(product);
 		
-		page = new PageImpl<>(List.of(productMinDTO));
+		page = new PageImpl<>(List.of(productDTO));
 		
-		Mockito.when(service.findAll(any())).thenReturn(page);
+		Mockito.when(service.findAllPaged(any())).thenReturn(page);
 		
 		Mockito.when(service.findById(existingProductId)).thenReturn(productDTO);
 		Mockito.when(service.findById(nonExistingProductId)).thenThrow(ResourceNotFoundException.class);

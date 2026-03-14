@@ -2,7 +2,11 @@
 
 HELP.md
 target/
+<<<<<<< HEAD
 .mvn/wrapper/maven-wrapper.jar
+=======
+**/.mvn/wrapper/maven-wrapper.jar
+>>>>>>> develop
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -58,7 +62,11 @@ build/
 .history/*
 
 # Miscellaneous
+<<<<<<< HEAD
 /.angular/cache
+=======
+**/.angular/cache
+>>>>>>> develop
 .sass-cache/
 /connect.lock
 /coverage
