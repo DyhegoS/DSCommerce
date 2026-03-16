@@ -124,7 +124,8 @@ public class ProductService {
     }
 
     private void checkCategoryExists(CategoryDTO dto){
-        Category cat = categoryRepository.findById(dto.getId()).orElseThrow(
+        @SuppressWarnings("unused")
+		Category cat = categoryRepository.findById(dto.getId()).orElseThrow(
                 () -> new ResourceNotFoundException("Categoria não existe!"));
     }
 

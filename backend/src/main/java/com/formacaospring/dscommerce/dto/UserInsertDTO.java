@@ -1,8 +1,10 @@
 package com.formacaospring.dscommerce.dto;
 
+import com.formacaospring.dscommerce.services.validation.UserInsertValid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@UserInsertValid
 public class UserInsertDTO extends UserDTO{
 
     @NotBlank(message = "Campo obrigatório")

@@ -51,8 +51,8 @@ public class UserServiceTests {
 
         Mockito.when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
         Mockito.when(repository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(new ArrayList<>());
-        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(Optional.of(seller));
-        Mockito.when(repository.findByEmail(nonExistingUsername)).thenReturn(Optional.empty());
+        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(seller);
+        Mockito.when(repository.findByEmail(nonExistingUsername)).thenReturn(null);
     }
 
     @Test

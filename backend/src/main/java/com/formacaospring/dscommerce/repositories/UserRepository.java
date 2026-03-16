@@ -1,14 +1,12 @@
 package com.formacaospring.dscommerce.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.projections.UserDetailsProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.formacaospring.dscommerce.entities.User;
-import com.formacaospring.dscommerce.projections.UserDetailsProjection;
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
@@ -23,5 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
 		""")
 	List<UserDetailsProjection> searchUserAndRolesByEmail(String email);
 		
-	Optional<User> findByEmail(String email);
+	User findByEmail(String email);
 }

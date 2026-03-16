@@ -1,15 +1,9 @@
 package com.formacaospring.dscommerce.services;
 
-import com.formacaospring.dscommerce.dto.RoleDTO;
-import com.formacaospring.dscommerce.dto.UserDTO;
-import com.formacaospring.dscommerce.dto.UserInsertDTO;
-import com.formacaospring.dscommerce.entities.Role;
-import com.formacaospring.dscommerce.entities.User;
-import com.formacaospring.dscommerce.projections.UserDetailsProjection;
-import com.formacaospring.dscommerce.repositories.RoleRepository;
-import com.formacaospring.dscommerce.repositories.UserRepository;
-import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.formacaospring.dscommerce.dto.RoleDTO;
+import com.formacaospring.dscommerce.dto.UserDTO;
+import com.formacaospring.dscommerce.dto.UserInsertDTO;
+import com.formacaospring.dscommerce.dto.UserUpdateDTO;
+import com.formacaospring.dscommerce.entities.Role;
+import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.projections.UserDetailsProjection;
+import com.formacaospring.dscommerce.repositories.UserRepository;
+import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
+import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 
 @Service
@@ -34,9 +39,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
     @Transactional(readOnly = true)
     public Page<UserDTO> findAll(Pageable pageable){
         Page<User> users = repository.findAll(pageable);
@@ -50,6 +52,7 @@ public class UserService implements UserDetailsService {
         return new UserDTO(user);
     }
 
+    @Transactional
     public UserDTO insert(UserInsertDTO dto){
         User entity = new User();
         copyToEntity(entity, dto);
@@ -58,6 +61,41 @@ public class UserService implements UserDetailsService {
         return new UserDTO(entity);
     }
 
+    @Transactional
+    public UserDTO update(Long id, UserUpdateDTO dto){
+        try{
+            User entity = repository.getReferenceById(id);
+            copyToEntity(entity, dto);
+            entity = repository.save(entity);
+            return new UserDTO(entity);
+        }catch(EntityNotFoundException e){
+            throw new ResourceNotFoundException("Id número " + id + " não encontrado");
+        }
+
+    }
+    
+    public void delete(Long id) {
+    	
+    	if(!repository.existsById(id)) {
+    		throw new ResourceNotFoundException("Usuário não encontrado!");
+    	}
+    	
+    	authService.validateAdmin(id);
+    	
+    	try {
+    		repository.deleteById(id);
+    		
+    	}catch(DataIntegrityViolationException e) {
+    		throw new DatabaseException("Falha de integridade referencial!");
+    	}
+    }
+    
+    @Transactional(readOnly = true)
+	public UserDTO getMe(){
+		User user = authService.authenticated();
+		return new UserDTO(user);
+	}
+    
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -76,12 +114,6 @@ public class UserService implements UserDetailsService {
 		return user;
 	}
 
-	@Transactional(readOnly = true)
-	public UserDTO getMe(){
-		User user = authService.authenticated();
-		return new UserDTO(user);
-	}
-
     private void copyToEntity(User entity, UserDTO dto){
         entity.setName(dto.getName());
         entity.setUsername(dto.getusername());
@@ -89,15 +121,10 @@ public class UserService implements UserDetailsService {
         entity.getRoles().clear();
         for(RoleDTO roleDto : dto.getRoles()){
             Role role = new Role();
-            checkRoleExists(roleDto);
             role.setId(roleDto.getId());
             entity.getRoles().add(role);
         }
     }
 
-    private void checkRoleExists(RoleDTO dto){
-        Role role = roleRepository.findById(dto.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Role não existe!"));
-    }
 
 }

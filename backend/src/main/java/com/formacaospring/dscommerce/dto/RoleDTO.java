@@ -4,26 +4,26 @@ import com.formacaospring.dscommerce.entities.Role;
 
 public class RoleDTO {
     private Long id;
-    private String authory;
+    private String authority;
 
     public RoleDTO(){
     }
 
     public RoleDTO(Long id, String authory) {
         this.id = id;
-        this.authory = authory;
+        this.authority = authory;
     }
 
     public RoleDTO(Role role){
         id = role.getId();
-        authory = role.getAuthority();
+        authority = role.getAuthority();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getAuthory() {
-        return authory;
+    public String getAuthority() {
+        return authority;
     }
 }

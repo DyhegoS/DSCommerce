@@ -27,11 +27,18 @@ public class AuthService {
         	throw new ForbiddenException("Acesso Negado! Deve ser dono do pedido ou admin!");
         }
     }
+    
+    public void validateAdmin(Long id) {
+    	User me = authenticated();
+    	if(me.hasRole("ROLE_ADMIN") && me.getId().equals(id)) {
+    		throw new ForbiddenException("Acesso Negado! Não se pode auto excluir!");
+    	}
+    }
 
     protected User authenticated() {
         try{
             String username = customUserUtil.getLoggedUsername();
-            return userRepository.findByEmail(username).get();
+            return userRepository.findByEmail(username);
         }
         catch(Exception e){
             throw new UsernameNotFoundException("User not found");

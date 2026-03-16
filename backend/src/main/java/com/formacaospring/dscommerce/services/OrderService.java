@@ -36,9 +36,6 @@ public class OrderService {
     private ClientRepository clientRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private AuthService authService;
 
     @Transactional(readOnly = true)
