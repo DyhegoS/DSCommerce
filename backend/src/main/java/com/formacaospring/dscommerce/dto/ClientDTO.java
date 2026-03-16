@@ -2,18 +2,29 @@ package com.formacaospring.dscommerce.dto;
 
 import com.formacaospring.dscommerce.entities.Client;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class ClientDTO {
     private Long id;
+    
+    @NotBlank(message = "Campo não pode ficar em branco!")
+    @Size(min = 2, max = 80, message = "Nome da empresa precisa ter entre 2 a 80 caracteres!")
     private String name;
+    
+    @Email(message = "Informe um e-mail válido!")
     private String email;
 
     @Size(min = 10, max = 16, message = "CNPJ precisa ter de 10 a 16 números.")
     @NotNull(message = "Campo requerido!")
     private String cnpj;
+    
+    @NotBlank(message = "Campo não pode ficar em branco!")
+    @Size(min = 5, max = 80, message = "Nome da empresa precisa ter entre 5 a 80 caracteres!")
     private String address;
+    
     private String phone;
 
     public ClientDTO(){

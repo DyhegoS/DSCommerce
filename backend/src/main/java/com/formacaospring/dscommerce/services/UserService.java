@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.dto.RoleDTO;
@@ -74,6 +75,7 @@ public class UserService implements UserDetailsService {
 
     }
     
+    @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
     	
     	if(!repository.existsById(id)) {

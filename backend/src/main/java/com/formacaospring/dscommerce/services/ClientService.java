@@ -1,15 +1,15 @@
 package com.formacaospring.dscommerce.services;
 
-import com.formacaospring.dscommerce.dto.ClientDTO;
-import com.formacaospring.dscommerce.entities.Client;
-import com.formacaospring.dscommerce.repositories.ClientRepository;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.formacaospring.dscommerce.dto.ClientDTO;
+import com.formacaospring.dscommerce.dto.ClientInsertDTO;
+import com.formacaospring.dscommerce.entities.Client;
+import com.formacaospring.dscommerce.repositories.ClientRepository;
 
 @Service
 public class ClientService {
@@ -39,5 +39,21 @@ public class ClientService {
         }else{
             throw new IllegalArgumentException("número de CNPJ inválido ou não existe!");
         }
+    }
+    
+    @Transactional
+    public ClientDTO insert(ClientInsertDTO dto) {
+    	Client entity = new Client();
+    	copyToEntity(entity, dto);
+    	entity = repository.save(entity);
+    	return new ClientDTO(entity);
+    }
+    
+    private void copyToEntity(Client entity, ClientDTO dto) {
+    	entity.setName(dto.getName());
+    	entity.setCnpj(dto.getCnpj());
+    	entity.setEmail(dto.getEmail());
+    	entity.setAddress(dto.getAddress());
+    	entity.setPhone(dto.getPhone());
     }
 }
