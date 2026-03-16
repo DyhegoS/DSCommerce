@@ -5,6 +5,7 @@ import com.formacaospring.dscommerce.entities.Client;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class ClientDTO {
@@ -17,7 +18,7 @@ public class ClientDTO {
     @Email(message = "Informe um e-mail válido!")
     private String email;
 
-    @Size(min = 10, max = 16, message = "CNPJ precisa ter de 10 a 16 números.")
+    @Pattern(regexp = "^(?!(\\d)\\1{13})\\d{14}$", message = "CNPJ inválido!")
     @NotNull(message = "Campo requerido!")
     private String cnpj;
     
@@ -25,7 +26,10 @@ public class ClientDTO {
     @Size(min = 5, max = 80, message = "Nome da empresa precisa ter entre 5 a 80 caracteres!")
     private String address;
     
+    @Pattern(regexp = "^(\\+55\\s?)?(\\(?\\d{2}\\)?\\s?)?(9?\\d{4}-?\\d{4})$", message = "Número de telefone inválido!")
     private String phone;
+    
+    private UserDTO user;
 
     public ClientDTO(){
     }
@@ -34,13 +38,14 @@ public class ClientDTO {
     	this.id = id;
     }
 
-    public ClientDTO(Long id, String name, String email, String cnpj, String address, String phone) {
+    public ClientDTO(Long id, String name, String email, String cnpj, String address, String phone, UserDTO user) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cnpj = cnpj;
         this.address = address;
         this.phone = phone;
+        this.user = user;
     }
 
     public ClientDTO(Client entity){
@@ -50,6 +55,7 @@ public class ClientDTO {
         cnpj = entity.getCnpj();
         address = entity.getAddress();
         phone = entity.getPhone();
+        user = new UserDTO(entity.getUser());
     }
 
     public Long getId() {
@@ -74,5 +80,9 @@ public class ClientDTO {
 
     public String getPhone() {
         return phone;
+    }
+    
+    public UserDTO getUserDTO() {
+    	return user;
     }
 }

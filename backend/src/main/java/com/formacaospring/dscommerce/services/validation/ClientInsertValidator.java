@@ -30,12 +30,17 @@ public class ClientInsertValidator implements ConstraintValidator<ClientInsertVa
         Client client = repository.findByEmail(dto.getEmail());
         
         if(client != null) {
-            list.add(new FieldMessage("email", "E-mail de cliente já existe!"));
+            list.add(new FieldMessage("email", "E-mail de cliente já cadastrado!"));
         }
         
         client = repository.findByCNPJ(dto.getCnpj());
         if(client != null) {
-        	list.add(new FieldMessage("CNPJ", "CNPJ de cliente já existe!"));
+        	list.add(new FieldMessage("cnpj", "CNPJ de cliente já cadastrado!"));
+        }
+        
+        client = repository.findByPhone(dto.getPhone());
+        if(client != null) {
+        	list.add(new FieldMessage("phone", "Telefone de cliente já cadastrado!"));
         }
         
         for (FieldMessage e : list) {

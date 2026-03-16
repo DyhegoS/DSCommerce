@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.formacaospring.dscommerce.dto.ClientDTO;
 import com.formacaospring.dscommerce.dto.ClientInsertDTO;
 import com.formacaospring.dscommerce.entities.Client;
+import com.formacaospring.dscommerce.entities.User;
 import com.formacaospring.dscommerce.repositories.ClientRepository;
 
 @Service
@@ -16,6 +17,9 @@ public class ClientService {
 
     @Autowired
     private ClientRepository repository;
+    
+    @Autowired
+    private AuthService authService;
     
     @Transactional(readOnly = true)
     public Page<ClientDTO> findAll(Pageable pageable){
@@ -44,16 +48,18 @@ public class ClientService {
     @Transactional
     public ClientDTO insert(ClientInsertDTO dto) {
     	Client entity = new Client();
-    	copyToEntity(entity, dto);
+    	copyToEntity(entity, dto);  	
     	entity = repository.save(entity);
     	return new ClientDTO(entity);
     }
-    
+      
     private void copyToEntity(Client entity, ClientDTO dto) {
+    	User user = authService.authenticated();
     	entity.setName(dto.getName());
     	entity.setCnpj(dto.getCnpj());
     	entity.setEmail(dto.getEmail());
     	entity.setAddress(dto.getAddress());
     	entity.setPhone(dto.getPhone());
+    	entity.setUser(user);
     }
 }

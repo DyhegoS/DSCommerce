@@ -1,7 +1,5 @@
 package com.formacaospring.dscommerce.repositories;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,9 +19,14 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
             "WHERE obj.cnpj LIKE CONCAT('%', :cnpj, '%')")
     Page<Client> searchByCnpj(String cnpj, Pageable pageable);
     
+    //validation
     Client findByEmail(String email);
     
     @Query("SELECT obj FROM Client obj "
     		+ "WHERE obj.cnpj = :cnpj")
     Client findByCNPJ(String cnpj);
+    
+    @Query("SELECT obj FROM Client obj "
+    		+ "WHERE obj.phone = :phone")
+    Client findByPhone(String phone);
 }
