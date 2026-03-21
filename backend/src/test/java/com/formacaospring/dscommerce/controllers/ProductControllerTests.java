@@ -24,8 +24,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.dto.ProductMinDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductMinDTO;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.services.ProductService;
 import com.formacaospring.dscommerce.services.UserService;

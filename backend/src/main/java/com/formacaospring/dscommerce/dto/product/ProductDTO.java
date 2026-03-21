@@ -1,9 +1,10 @@
-package com.formacaospring.dscommerce.dto;
+package com.formacaospring.dscommerce.dto.product;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.formacaospring.dscommerce.dto.CategoryDTO;
 import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 

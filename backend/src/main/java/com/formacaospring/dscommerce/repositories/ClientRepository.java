@@ -12,12 +12,9 @@ import com.formacaospring.dscommerce.entities.Client;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
     @Query("SELECT obj FROM Client obj " +
-            "WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%'))")
-    Page<Client> searchByName(String name, Pageable pageable);
-
-    @Query("SELECT obj FROM Client obj " +
-            "WHERE obj.cnpj LIKE CONCAT('%', :cnpj, '%')")
-    Page<Client> searchByCnpj(String cnpj, Pageable pageable);
+    		"WHERE (:name IS NULL OR UPPER(obj.name) LIKE UPPER(CONCAT(:name, '%'))) " +
+    		"OR (:cnpj IS NULL OR obj.cnpj LIKE CONCAT(:cnpj, '%'))")
+    Page<Client> searchByNameOrCNPJ(String name, String cnpj, Pageable pageable);
     
     //validation
     Client findByEmail(String email);

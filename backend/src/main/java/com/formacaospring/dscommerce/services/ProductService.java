@@ -1,16 +1,7 @@
 package com.formacaospring.dscommerce.services;
 
-import com.formacaospring.dscommerce.dto.CategoryDTO;
-import com.formacaospring.dscommerce.dto.ProductDTO;
-import com.formacaospring.dscommerce.entities.Category;
-import com.formacaospring.dscommerce.entities.Product;
-import com.formacaospring.dscommerce.projections.ProductProjection;
-import com.formacaospring.dscommerce.repositories.CategoryRepository;
-import com.formacaospring.dscommerce.repositories.ProductRepository;
-import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
-import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
-import com.formacaospring.dscommerce.util.Utils;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -20,7 +11,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.formacaospring.dscommerce.dto.CategoryDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductInsertDTO;
+import com.formacaospring.dscommerce.entities.Category;
+import com.formacaospring.dscommerce.entities.Product;
+import com.formacaospring.dscommerce.projections.ProductProjection;
+import com.formacaospring.dscommerce.repositories.CategoryRepository;
+import com.formacaospring.dscommerce.repositories.ProductRepository;
+import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
+import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
+import com.formacaospring.dscommerce.util.Utils;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class ProductService {
@@ -75,7 +78,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO insert(ProductDTO dto) {
+    public ProductDTO insert(ProductInsertDTO dto) {
         Product entity = new Product();
         copyDtoToentity(dto, entity);
         entity = repository.save(entity);
@@ -117,16 +120,8 @@ public class ProductService {
         entity.getCategories().clear();
         for(CategoryDTO catDto : dto.getCategories()){
             Category cat = new Category();
-            checkCategoryExists(catDto);
             cat.setId(catDto.getId());
             entity.getCategories().add(cat);
         }
     }
-
-    private void checkCategoryExists(CategoryDTO dto){
-        @SuppressWarnings("unused")
-		Category cat = categoryRepository.findById(dto.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Categoria não existe!"));
-    }
-
 }

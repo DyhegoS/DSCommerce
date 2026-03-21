@@ -22,28 +22,18 @@ public class ClientService {
     private AuthService authService;
     
     @Transactional(readOnly = true)
-    public Page<ClientDTO> findAll(Pageable pageable){
-    	Page<Client> result = repository.findAll(pageable);
+    public Page<ClientDTO> findAll(String name, String cnpj, Pageable pageable){
+    	String cnpjClear = cnpj.replaceAll("[^0-9]", "");
+    	if(name.isEmpty()) {
+    		name = null;
+    	}else if(cnpjClear.isEmpty()) {
+    		cnpjClear = null;
+    	}
+    	
+    	Page<Client> result = repository.searchByNameOrCNPJ(name, cnpjClear, pageable);
     	return result.map(ClientDTO::new);
     }
 
-    @Transactional(readOnly = true)
-    public Page<ClientDTO> findByName(String name, Pageable pageable){
-        Page<Client> result = repository.searchByName(name, pageable);
-        return result.map(ClientDTO::new);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<ClientDTO> findByCnpj(String cnpj, Pageable pageable){
-    	String cnpjClear = cnpj.replaceAll("[^0-9]", "");
-        String regexCNPJ = "^(?!(\\d)\\1{13})\\d{14}$";
-        if(cnpjClear.matches(regexCNPJ)){
-            Page<Client> result = repository.searchByCnpj(cnpjClear, pageable);
-            return result.map(ClientDTO::new);
-        }else{
-            throw new IllegalArgumentException("número de CNPJ inválido ou não existe!");
-        }
-    }
     
     @Transactional
     public ClientDTO insert(ClientInsertDTO dto) {

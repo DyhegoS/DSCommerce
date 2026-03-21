@@ -33,15 +33,7 @@ public class ClientController {
     public ResponseEntity<Page<ClientDTO>> findAll(@RequestParam(defaultValue = "") String name,
                                                    @RequestParam(defaultValue = "") String cnpj,
                                                    Pageable pageable){
-        if(!name.isBlank() && cnpj.isBlank()){
-            Page<ClientDTO> dto = service.findByName(name, pageable);
-            return ResponseEntity.ok(dto);
-        }else if(name.isBlank() && !cnpj.isBlank()) {
-        	Page<ClientDTO> dto = service.findByCnpj(cnpj, pageable);
-            return ResponseEntity.ok(dto);
-        }
-
-        Page<ClientDTO> dto = service.findAll(pageable);
+    	Page<ClientDTO> dto = service.findAll(name, cnpj, pageable);
         return ResponseEntity.ok(dto);
     }
     
