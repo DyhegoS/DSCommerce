@@ -2,11 +2,11 @@ package com.formacaospring.dscommerce.services.validation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.formacaospring.dscommerce.controllers.handlers.FieldMessage;
+import com.formacaospring.dscommerce.dto.RoleDTO;
 import com.formacaospring.dscommerce.dto.UserInsertDTO;
 import com.formacaospring.dscommerce.entities.Role;
 import com.formacaospring.dscommerce.entities.User;
@@ -31,18 +31,24 @@ public class UserInsertValidator implements ConstraintValidator<UserInsertValid,
     @Override
     public boolean isValid(UserInsertDTO dto, ConstraintValidatorContext context) {
 
+    	int count = 0;
         List<FieldMessage> list = new ArrayList<>();
 
         User user = repository.findByEmail(dto.getEmail());
-        Optional<Role> role = roleRepository.findById(dto.getRoles().iterator().next().getId());
+        List<Role> role = roleRepository.findAll();
         
         if(user != null) {
             list.add(new FieldMessage("email", "E-mail já existe!"));
         }
         
-        if(role.isEmpty()) {
-        	list.add(new FieldMessage("role", "Role não existe!"));
+        for(RoleDTO roles : dto.getRoles()) {
+        	boolean roleExists = role.stream().anyMatch(obj -> obj.getId().equals(roles.getId()));
+        	if(!roleExists) {
+        		list.add(new FieldMessage("role"+count, "Role ID:" + roles.getId() + " não existe!"));
+        		count++;
+        	}
         }
+        
 
         for (FieldMessage e : list) {
             context.disableDefaultConstraintViolation();
