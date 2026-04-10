@@ -1,0 +1,85 @@
+<form [formGroup]="productForm">
+  <mat-form-field class="hideId">
+    <input matInput formControlName="id" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Nome</mat-label>
+    <input matInput placeholder="Informe o nome do produto" formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Descrição</mat-label>
+    <input matInput placeholder="Informe a descrição do produto" formControlName="description" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Preço</mat-label>
+    <input matInput placeholder="Informe o preço do produto" formControlName="price" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Quantidade</mat-label>
+    <input matInput placeholder="Informe a quantidade do produto" formControlName="quantity" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Imagem</mat-label>
+    <input matInput placeholder="Informe o link da imagem do produto" formControlName="imgUrl" />
+  </mat-form-field>
+
+  @if (btnInsert) {
+    <button matButton="elevated" class="btnStyles">Cadastrar</button>
+  } @else {
+    <button matButton="elevated" class="btnStyles">Alterar</button>
+    <button matButton="elevated" class="btnStyles">Remover</button>
+    <button matButton="elevated" class="btnStyles">Cancelar</button>
+  }
+</form>
+
+<table mat-table [dataSource]="products()" class="mat-elevation-z8 tabela-compacta">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>NOME</th>
+    <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>DESCRIÇÃO</th>
+    <td mat-cell class="description" *matCellDef="let product">{{ product.description }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>PREÇO</th>
+    <td mat-cell *matCellDef="let product">{{ product.price }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantity">
+    <th mat-header-cell *matHeaderCellDef>QUANTIDADE</th>
+    <td mat-cell *matCellDef="let product">{{ product.quantity }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="imgUrl">
+    <th mat-header-cell *matHeaderCellDef>IMAGEM</th>
+    <td mat-cell *matCellDef="let product">{{ product.imgUrl }}</td>
+  </ng-container>
+
+  <!-- <ng-container matColumnDef="categories">
+    <th mat-header-cell *matHeaderCellDef>CATEGORIAS</th>
+    <td mat-cell *matCellDef="let product">{{ product.categories }}</td>
+  </ng-container> -->
+
+  <ng-container matColumnDef="selecionar">
+    <th mat-header-cell *matHeaderCellDef>SELECIONAR</th>
+    <td mat-cell *matCellDef="let product">
+      <button matButton="elevated">Selecionar</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>
