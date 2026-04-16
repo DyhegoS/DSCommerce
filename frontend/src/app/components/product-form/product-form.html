@@ -1,0 +1,38 @@
+<form [formGroup]="productForm">
+  <mat-form-field class="hideId">
+    <input matInput formControlName="id" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Nome</mat-label>
+    <input matInput placeholder="Informe o nome do produto" formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label class="text-input">Descrição</mat-label>
+    <input matInput placeholder="Informe a descrição do produto" formControlName="description" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Preço</mat-label>
+    <input matInput placeholder="Informe o preço do produto" formControlName="price" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Quantidade</mat-label>
+    <input matInput placeholder="Informe a quantidade do produto" formControlName="quantity" />
+  </mat-form-field>
+
+  <mat-form-field class="Inputs">
+    <mat-label>Imagem</mat-label>
+    <input matInput placeholder="Informe o link da imagem do produto" formControlName="imgUrl" />
+  </mat-form-field>
+
+  @if (btnInsert) {
+    <button matButton="elevated" class="btnInsert">Cadastrar</button>
+  } @else {
+    <button matButton="filled" class="btnUpdate btnGeneral">Alterar</button>
+    <button matButton="filled" class="btnRemove btnGeneral">Remover</button>
+    <button matButton="filled" class="btnCancel btnGeneral">Cancelar</button>
+  }
+</form>

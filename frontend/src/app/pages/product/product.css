@@ -1,31 +1,7 @@
-form {
-  width: 50%;
-  margin: 30px auto;
-  text-align: center;
-}
-
-.hideId {
-  display: none;
-}
-
-.Inputs {
-  width: 100%;
-}
-
-.btnStyles {
-  margin-left: 5px;
-}
-
-.description {
-  overflow-y: scroll;
-}
-
-.tabela-compacta .mat-mdc-row {
-  min-height: 32px !important;
-  height: auto !important;
-}
-
-.tabela-compacta .mat-mdc-cell {
-  padding: 5px 8px !important;
-  line-height: 20px !important;
+.header-container {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
 }

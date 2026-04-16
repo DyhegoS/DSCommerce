@@ -1,28 +1,22 @@
-import { Component, effect, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ProductModel } from '../../models/ProductModel';
 import { ProductService } from '../../services/product-service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { ProductForm } from '../../components/product-form/product-form';
 
 @Component({
   selector: 'app-product',
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-  ],
+  imports: [MatTableModule, MatButtonModule],
   templateUrl: './product.html',
   styleUrl: './product.css',
 })
 export class Product {
-  btnInsert: boolean = true;
+  private dialog = inject(MatDialog);
 
-  columns: String[] = ['id', 'name', 'description', 'price', 'quantity', 'imgUrl'];
+  columns: String[] = ['id', 'name', 'price', 'quantity', 'imgUrl', 'select'];
 
   product = new ProductModel();
 
@@ -30,16 +24,10 @@ export class Product {
 
   dataSource = new MatTableDataSource<ProductModel>();
 
-  productForm = new FormGroup({
-    id: new FormControl(),
-    name: new FormControl(),
-    description: new FormControl(),
-    price: new FormControl(),
-    quantity: new FormControl(),
-    imgUrl: new FormControl(),
-  });
-
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private route: Router,
+  ) {
     effect(() => {
       this.dataSource.data = this.products();
     });
@@ -47,6 +35,12 @@ export class Product {
 
   ngOnInit(): void {
     this.findAll();
+  }
+
+  openDialog() {
+    this.dialog.open(ProductForm, {
+      width: '50vw',
+    });
   }
 
   findAll(): void {
