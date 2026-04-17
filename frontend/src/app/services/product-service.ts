@@ -12,7 +12,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  findAll(page = 0, size = 10): Observable<PageResponse<ProductModel>> {
-    return this.http.get<PageResponse<ProductModel>>(`${this.url}?oage=${page}&size${size}`);
+  findAll(page: number, size: number): Observable<PageResponse<ProductModel>> {
+    return this.http.get<PageResponse<ProductModel>>(`${this.url}?page=${page}&size=${size}`);
   }
 }
