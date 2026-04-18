@@ -49,6 +49,7 @@ export class Product {
 
   findAll(): void {
     this.productService.findAll(this.pageIndex(), this.pageSize()).subscribe((res) => {
+      console.log('res:', res);
       this.products.set(res.content);
       this.totalElements.set(res.totalElements);
     });

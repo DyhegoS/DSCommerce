@@ -18,3 +18,7 @@
   overflow-y: scroll;
   min-height: 0; /* importante para o flex funcionar corretamente */
 }
+
+mat-paginator {
+  align-self: center;
+}
