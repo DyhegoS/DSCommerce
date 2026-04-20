@@ -6,17 +6,8 @@
   padding: 10px;
 }
 
-:host {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow: hidden;
-}
-
-.container {
-  flex: 1;
-  overflow-y: scroll;
-  min-height: 0; /* importante para o flex funcionar corretamente */
+.header-scroll-container {
+  height: 80%;
 }
 
 mat-paginator {

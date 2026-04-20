@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductForm } from '../../components/product-form/product-form';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-product',
-  imports: [MatTableModule, MatButtonModule, MatPaginatorModule],
+  imports: [MatTableModule, MatButtonModule, MatPaginatorModule, ScrollingModule],
   templateUrl: './product.html',
   styleUrl: './product.css',
 })

@@ -1,10 +1,15 @@
 .container {
+  width: 100%;
   height: 100vh;
 }
 
 .sidenav {
-  overflow: hidden;
+  height: 100vh;
   transition: width 0.3s ease;
+}
+
+.content {
+  height: 100vh;
 }
 
 .sidenav:hover {
