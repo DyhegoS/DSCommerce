@@ -6,10 +6,7 @@
   padding: 10px;
 }
 
-.header-scroll-container {
-  height: 80%;
-}
-
 mat-paginator {
-  align-self: center;
+  display: flex;
+  justify-content: center;
 }

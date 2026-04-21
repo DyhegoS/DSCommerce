@@ -1,4 +1,8 @@
 <div class="container">
-  <app-header></app-header>
-  <app-sidenav></app-sidenav>
+  @if (isAuthenticated()) {
+    <app-header></app-header>
+    <app-sidenav></app-sidenav>
+  } @else {
+    <router-outlet></router-outlet>
+  }
 </div>

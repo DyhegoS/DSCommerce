@@ -15,4 +15,8 @@ export class ProductService {
   findAll(page: number, size: number): Observable<PageResponse<ProductModel>> {
     return this.http.get<PageResponse<ProductModel>>(`${this.url}?page=${page}&size=${size}`);
   }
+
+  insert(obj: ProductModel): Observable<ProductModel> {
+    return this.http.post<ProductModel>(this.url, obj);
+  }
 }

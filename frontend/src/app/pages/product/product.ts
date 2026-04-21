@@ -3,7 +3,6 @@ import { ProductModel } from '../../models/ProductModel';
 import { ProductService } from '../../services/product-service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductForm } from '../../components/product-form/product-form';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -29,10 +28,7 @@ export class Product {
 
   dataSource = new MatTableDataSource<ProductModel>();
 
-  constructor(
-    private productService: ProductService,
-    private route: Router,
-  ) {
+  constructor(private productService: ProductService) {
     effect(() => {
       this.dataSource.data = this.products();
     });
@@ -43,16 +39,31 @@ export class Product {
   }
 
   openDialog() {
-    this.dialog.open(ProductForm, {
+    const dialogRef = this.dialog.open(ProductForm, {
       width: '50vw',
+    });
+
+    dialogRef.afterClosed().subscribe((data: ProductModel) => {
+      if (data) {
+        this.insert(data);
+      }
     });
   }
 
   findAll(): void {
     this.productService.findAll(this.pageIndex(), this.pageSize()).subscribe((res) => {
-      console.log('res:', res);
       this.products.set(res.content);
       this.totalElements.set(res.totalElements);
+    });
+  }
+
+  insert(product: ProductModel): void {
+    this.productService.insert(product).subscribe((res) => {
+      this.products.update((currProducts) => [...currProducts, res]);
+
+      this.product = new ProductModel();
+
+      alert('Produto cadastrado com sucesso!');
     });
   }
 

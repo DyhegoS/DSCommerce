@@ -1,0 +1,28 @@
+<div class="container">
+  <form [formGroup]="loginForm">
+    <mat-form-field class="Inputs">
+      <mat-label>Usuário</mat-label>
+      <input matInput formControlName="username" placeholder="nome de usuário" required />
+    </mat-form-field>
+    <mat-form-field class="Inputs">
+      <mat-label>Senha</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        [type]="hide() ? 'password' : 'text'"
+        placeholder="informe a senha"
+        required
+      />
+      <button
+        matIconButton
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+    <button matButton="filled" (click)="onSubmit()">Login</button>
+  </form>
+</div>

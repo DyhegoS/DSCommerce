@@ -29,7 +29,7 @@
   </mat-form-field>
 
   @if (btnInsert) {
-    <button matButton="elevated" class="btnInsert">Cadastrar</button>
+    <button matButton="elevated" class="btnInsert" (click)="onSubmit()">Cadastrar</button>
   } @else {
     <button matButton="filled" class="btnUpdate btnGeneral">Alterar</button>
     <button matButton="filled" class="btnRemove btnGeneral">Remover</button>
