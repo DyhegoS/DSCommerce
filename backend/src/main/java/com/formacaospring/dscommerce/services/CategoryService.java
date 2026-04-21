@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.repositories.CategoryRepository;
+import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -58,5 +61,18 @@ public class CategoryService {
     	}catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundException("id de categoria não encontrado!");
 		}
+    }
+    
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+    	if(!repository.existsById(id)) {
+    		throw new ResourceNotFoundException("Categoria não encontrada!");
+    	}
+    	
+    	try {
+    		repository.deleteById(id);
+    	}catch(DataIntegrityViolationException e) {
+    		throw new DatabaseException("Falha de integridade Referencial!");
+    	}
     }
 }

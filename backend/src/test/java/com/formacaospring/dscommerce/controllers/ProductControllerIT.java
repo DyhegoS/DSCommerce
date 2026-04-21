@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
 import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.tests.TokenUtil;

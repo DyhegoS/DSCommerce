@@ -1,33 +1,24 @@
 package com.formacaospring.dscommerce.services;
 
-import java.time.Instant;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.formacaospring.dscommerce.dto.OrderDTO;
 import com.formacaospring.dscommerce.dto.OrderItemDTO;
 import com.formacaospring.dscommerce.dto.OrderMinDTO;
 import com.formacaospring.dscommerce.dto.UpdateOrderDTO;
-import com.formacaospring.dscommerce.entities.Client;
-import com.formacaospring.dscommerce.entities.Order;
-import com.formacaospring.dscommerce.entities.OrderItem;
-import com.formacaospring.dscommerce.entities.OrderStatus;
-import com.formacaospring.dscommerce.entities.Payment;
-import com.formacaospring.dscommerce.entities.PaymentStatus;
-import com.formacaospring.dscommerce.entities.Product;
-import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.entities.*;
 import com.formacaospring.dscommerce.repositories.ClientRepository;
 import com.formacaospring.dscommerce.repositories.OrderItemRepository;
 import com.formacaospring.dscommerce.repositories.OrderRepository;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
 import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
 import com.formacaospring.dscommerce.services.exceptions.ResourceNotFoundException;
-
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 public class OrderService {
@@ -43,9 +34,6 @@ public class OrderService {
     
     @Autowired
     private ClientRepository clientRepository;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private AuthService authService;
@@ -75,7 +63,7 @@ public class OrderService {
         order.setPayment(insertPayment(order));
         order.setClient(client);
 
-        User user = userService.authenticated();
+        User user = authService.authenticated();
         order.setUser(user);
         order.setUserUpdate(user);
 
@@ -108,7 +96,7 @@ public class OrderService {
         		order.setClient(client);
         	}
 
-            User user = userService.authenticated();
+            User user = authService.authenticated();
             order.setUserUpdate(user);
         	
         	order.setStatus(dto.getStatus());

@@ -1,6 +1,6 @@
 package com.formacaospring.dscommerce.tests;
 
-import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
 import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 

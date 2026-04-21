@@ -1,9 +1,12 @@
 package com.formacaospring.dscommerce.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.formacaospring.dscommerce.dto.UserDTO;
+import com.formacaospring.dscommerce.entities.User;
+import com.formacaospring.dscommerce.projections.UserDetailsProjection;
+import com.formacaospring.dscommerce.repositories.UserRepository;
+import com.formacaospring.dscommerce.tests.UserDetailsFactory;
+import com.formacaospring.dscommerce.tests.UserFactory;
+import com.formacaospring.dscommerce.util.CustomUserUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,19 +18,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.formacaospring.dscommerce.dto.UserDTO;
-import com.formacaospring.dscommerce.entities.User;
-import com.formacaospring.dscommerce.projections.UserDetailsProjection;
-import com.formacaospring.dscommerce.repositories.UserRepository;
-import com.formacaospring.dscommerce.tests.UserDetailsFactory;
-import com.formacaospring.dscommerce.tests.UserFactory;
-import com.formacaospring.dscommerce.util.CustomUserUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 public class UserServiceTests {
 
     @InjectMocks
     private UserService service;
+
+    @Mock
+    private AuthService authService;
 
     @Mock
     private UserRepository repository;
@@ -49,8 +51,8 @@ public class UserServiceTests {
 
         Mockito.when(repository.searchUserAndRolesByEmail(existingUsername)).thenReturn(userDetails);
         Mockito.when(repository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(new ArrayList<>());
-        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(Optional.of(seller));
-        Mockito.when(repository.findByEmail(nonExistingUsername)).thenReturn(Optional.empty());
+        Mockito.when(repository.findByEmail(existingUsername)).thenReturn(seller);
+        Mockito.when(repository.findByEmail(nonExistingUsername)).thenReturn(null);
     }
 
     @Test
@@ -71,7 +73,7 @@ public class UserServiceTests {
     public void authenticatedShouldReturnUserWhenUserExists() {
     	Mockito.when(userUtil.getLoggedUsername()).thenReturn(existingUsername);
     	
-    	User result = service.authenticated();
+    	User result = authService.authenticated();
     	
     	Assertions.assertNotNull(result);
     	Assertions.assertEquals(result.getUsername(), existingUsername);
@@ -82,14 +84,14 @@ public class UserServiceTests {
     	Mockito.doThrow(ClassCastException.class).when(userUtil).getLoggedUsername();
     	
     	Assertions.assertThrows(UsernameNotFoundException.class, () -> {
-    		service.authenticated();
+            authService.authenticated();
     	});
     }
     
     @Test
     public void getMeShouldReturnUserDTOWhenUserAuthenticated() {
-    	UserService spyUserService = Mockito.spy(service);
-    	Mockito.doReturn(seller).when(spyUserService).authenticated();
+        UserService spyUserService = Mockito.spy(service);
+    	Mockito.doReturn(seller).when(spyUserService).getMe();
     	
     	UserDTO result = spyUserService.getMe();
     	
@@ -101,7 +103,7 @@ public class UserServiceTests {
 	@Test
     public void getMeShouldThrowUsernameNotFoundExceptionWhenUserNotAuthenticated() {
     	UserService spyUserService = Mockito.spy(service);
-    	Mockito.doThrow(UsernameNotFoundException.class).when(spyUserService).authenticated();
+    	Mockito.doThrow(UsernameNotFoundException.class).when(spyUserService).getMe();
     	
     	Assertions.assertThrows(UsernameNotFoundException.class, () -> {
     		UserDTO result = spyUserService.getMe();

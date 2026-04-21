@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.formacaospring.dscommerce.dto.CategoryDTO;
-import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductInsertDTO;
 import com.formacaospring.dscommerce.entities.Category;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.projections.ProductProjection;
@@ -77,7 +78,7 @@ public class ProductService {
     }
 
     @Transactional
-    public ProductDTO insert(ProductDTO dto) {
+    public ProductDTO insert(ProductInsertDTO dto) {
         Product entity = new Product();
         copyDtoToentity(dto, entity);
         entity = repository.save(entity);
@@ -123,5 +124,4 @@ public class ProductService {
             entity.getCategories().add(cat);
         }
     }
-
 }

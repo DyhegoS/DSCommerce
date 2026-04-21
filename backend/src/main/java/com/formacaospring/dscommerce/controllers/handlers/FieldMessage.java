@@ -1,4 +1,4 @@
-package com.formacaospring.dscommerce.dto;
+package com.formacaospring.dscommerce.controllers.handlers;
 
 public class FieldMessage {
 

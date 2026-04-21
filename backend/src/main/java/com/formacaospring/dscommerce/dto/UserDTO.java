@@ -1,20 +1,26 @@
 package com.formacaospring.dscommerce.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-
 import com.formacaospring.dscommerce.entities.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDTO {
     
     private Long id;
+    @Size(min = 2, max = 50, message = "Campo deve ter no minimo 2 caracteres e no máximo 50")
+    @NotBlank(message = "Campo não pode ficar em branco")
     private String name;
+
     private String username;
+
+    @Email(message = "Informar e-mail válido!")
 	private String email;
 
-    private List<String> roles = new ArrayList<>();
+    private Set<RoleDTO> roles = new HashSet<>();
     
     public UserDTO() {
     }
@@ -24,9 +30,7 @@ public class UserDTO {
         name = entity.getName();
         username = entity.getUsername();
         email = entity.getEmail();
-        for(GrantedAuthority role : entity.getRoles()){
-            roles.add(role.getAuthority());
-        }
+        entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
     }
 
     public Long getId() {
@@ -45,7 +49,7 @@ public class UserDTO {
         return email;
     }
 
-    public List<String> getRoles() {
+    public Set<RoleDTO> getRoles() {
         return roles;
     }
 }

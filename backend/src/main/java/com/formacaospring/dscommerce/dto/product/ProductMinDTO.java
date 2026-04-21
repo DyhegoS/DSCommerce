@@ -1,4 +1,4 @@
-package com.formacaospring.dscommerce.dto;
+package com.formacaospring.dscommerce.dto.product;
 
 import com.formacaospring.dscommerce.entities.Product;
 

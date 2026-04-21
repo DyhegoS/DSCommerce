@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductInsertDTO;
 import com.formacaospring.dscommerce.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -66,10 +67,10 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")
     @PostMapping
-    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){
-        dto = service.insert(dto);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
-        return ResponseEntity.created(uri).body(dto);
+    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductInsertDTO dto){
+        ProductDTO newDto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(newDto);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK')")

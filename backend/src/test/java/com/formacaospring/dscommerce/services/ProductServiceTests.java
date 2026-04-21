@@ -19,7 +19,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.formacaospring.dscommerce.dto.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductDTO;
+import com.formacaospring.dscommerce.dto.product.ProductInsertDTO;
 import com.formacaospring.dscommerce.entities.Product;
 import com.formacaospring.dscommerce.repositories.ProductRepository;
 import com.formacaospring.dscommerce.services.exceptions.DatabaseException;
@@ -40,6 +41,7 @@ public class ProductServiceTests {
     private String productName;
     private Product product;
     private ProductDTO productDTO;
+    private ProductInsertDTO productInsertDTO;
     private PageImpl<Product> page;
 
     @BeforeEach
@@ -97,7 +99,7 @@ public class ProductServiceTests {
 
     @Test
     public void insertShouldReturnProductDTO(){
-        ProductDTO result = service.insert(productDTO);
+        ProductDTO result = service.insert(productInsertDTO);
         Assertions.assertNotNull(result);
         Assertions.assertEquals(result.getId(), product.getId());
     }

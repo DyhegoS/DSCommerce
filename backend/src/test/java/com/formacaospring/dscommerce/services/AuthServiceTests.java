@@ -33,7 +33,7 @@ public class AuthServiceTests {
 
 	@Test
 	public void validateSelfOrAdminShouldDoNothingWhenAdminLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(admin);
+		Mockito.when(service.authenticated()).thenReturn(admin);
 
 		Long userId = admin.getId();
 
@@ -44,7 +44,7 @@ public class AuthServiceTests {
 
 	@Test
 	public void validateSelfOrAdminShouldDoNothingWhenSellerLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(userSeller);
+		Mockito.when(service.authenticated()).thenReturn(userSeller);
 
 		Long userId = userSeller.getId();
 
@@ -55,7 +55,7 @@ public class AuthServiceTests {
 	
 	@Test
 	public void validateSelfOrAdminShouldThrowsForbiddenExceptionWhenUserStockLogged() {
-		Mockito.when(userService.authenticated()).thenReturn(UserStock);
+		Mockito.when(service.authenticated()).thenReturn(UserStock);
 		
 		Long userId = userSeller.getId();
 		
