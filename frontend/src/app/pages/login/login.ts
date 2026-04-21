@@ -36,10 +36,14 @@ export class Login {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Dados enviados:', this.loginForm.value);
-      this.authService.login(this.loginForm.value as any).subscribe({
+      const { username, password } = this.loginForm.value;
+
+      this.authService.login(username!, password!).subscribe({
         next: () => this.router.navigate(['/']),
-        error: () => alert('Usuário ou senha inválidos!'),
+        error: (err) => {
+          console.error('Erro:', err);
+          alert('Usuário ou senha inválidos!');
+        },
       });
     }
   }
