@@ -9,22 +9,23 @@
     "test": "ng test"
   },
   "private": true,
-  "packageManager": "npm@11.6.2",
+  "packageManager": "npm@11.9.0",
   "dependencies": {
+    "@angular/cdk": "^21.2.5",
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
     "@angular/core": "^21.2.0",
     "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.5",
     "@angular/platform-browser": "^21.2.0",
     "@angular/router": "^21.2.0",
-    "@fortawesome/angular-fontawesome": "^4.0.0",
-    "bootstrap": "^5.3.8",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zone.js": "^0.16.1"
   },
   "devDependencies": {
-    "@angular/build": "^21.2.0",
-    "@angular/cli": "^21.2.0",
+    "@angular/build": "^21.2.4",
+    "@angular/cli": "^21.2.4",
     "@angular/compiler-cli": "^21.2.0",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",

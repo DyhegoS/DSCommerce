@@ -1,0 +1,6 @@
+:root {
+  --warning-color-button: rgb(238, 198, 65);
+  --danger-color-button: rgb(187, 63, 63);
+  --light-text-color: rgb(252, 250, 232);
+  --dark-text-color: rgb(27, 27, 27);
+}

@@ -1,0 +1,12 @@
+.header-container {
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+mat-paginator {
+  display: flex;
+  justify-content: center;
+}
