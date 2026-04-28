@@ -12,8 +12,19 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  findAll(page: number, size: number): Observable<PageResponse<ProductModel>> {
-    return this.http.get<PageResponse<ProductModel>>(`${this.url}?page=${page}&size=${size}`);
+  // findAll(page: number, size: number): Observable<PageResponse<ProductModel>> {
+  //   return this.http.get<PageResponse<ProductModel>>(`${this.url}?page=${page}&size=${size}`);
+  // }
+
+  findAll(
+    page: number,
+    size: number,
+    name: string = '',
+    categoryName: string = '',
+  ): Observable<PageResponse<ProductModel>> {
+    return this.http.get<PageResponse<ProductModel>>(
+      `${this.url}?page=${page}&size=${size}&name=${name}&categoryName=${categoryName}`,
+    );
   }
 
   insert(obj: ProductModel): Observable<ProductModel> {

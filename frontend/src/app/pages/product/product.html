@@ -2,6 +2,22 @@
   <button matButton="filled" (click)="openDialog()" class="btnInsert">Novo Produto</button>
 </div>
 
+<mat-tab-group>
+  <mat-tab label="Categorias">
+    <mat-form-field>
+      <mat-label>Categorias</mat-label>
+      <mat-select (selectionChange)="onCategoryChange($event.value)">
+        <mat-option value="">Todas</mat-option>
+        @for (category of categories; track category.name) {
+          <mat-option [value]="category.name">{{ category.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-tab>
+  <mat-tab label="Nome"> ds </mat-tab>
+  <mat-tab label="Third"> Content 3 </mat-tab>
+</mat-tab-group>
+
 <table mat-table [dataSource]="products()" class="mat-elevation-z8 table-container">
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>ID</th>

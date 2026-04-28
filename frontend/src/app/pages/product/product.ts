@@ -1,3 +1,4 @@
+import { CategoryService } from './../../services/category-service';
 import { Component, effect, inject, signal } from '@angular/core';
 import { ProductModel } from '../../models/ProductModel';
 import { ProductService } from '../../services/product-service';
@@ -7,10 +8,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProductForm } from '../../components/product-form/product-form';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
+import { CategoriesModel } from '../../models/CategoriesModel';
 
 @Component({
   selector: 'app-product',
-  imports: [MatTableModule, MatButtonModule, MatPaginatorModule, ScrollingModule],
+  imports: [
+    MatTableModule,
+    MatButtonModule,
+    MatPaginatorModule,
+    ScrollingModule,
+    MatTabsModule,
+    MatSelectModule,
+  ],
   templateUrl: './product.html',
   styleUrl: './product.css',
 })
@@ -25,10 +36,16 @@ export class Product {
   product = new ProductModel();
 
   products = signal<ProductModel[]>([]);
+  categories: CategoriesModel[] = [];
+  selectedCategory = signal('');
+  selectedName = signal('');
 
   dataSource = new MatTableDataSource<ProductModel>();
 
-  constructor(private productService: ProductService) {
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+  ) {
     effect(() => {
       this.dataSource.data = this.products();
     });
@@ -50,11 +67,37 @@ export class Product {
     });
   }
 
+  // findAll(): void {
+  //   this.productService.findAll(this.pageIndex(), this.pageSize()).subscribe((res) => {
+  //     this.products.set(res.content);
+  //     this.totalElements.set(res.totalElements);
+  //   });
+  // }
+
+  findAllCategories(): void {
+    this.categoryService.findAll().subscribe((res) => (this.categories = res));
+  }
+
   findAll(): void {
-    this.productService.findAll(this.pageIndex(), this.pageSize()).subscribe((res) => {
-      this.products.set(res.content);
-      this.totalElements.set(res.totalElements);
-    });
+    this.productService
+      .findAll(this.pageIndex(), this.pageSize(), this.selectedName(), this.selectedCategory())
+      .subscribe((res) => {
+        this.products.set(res.content);
+        this.totalElements.set(res.totalElements);
+      });
+  }
+
+  onCategoryChange(categoryName: string): void {
+    this.selectedCategory.set(categoryName);
+    this.pageIndex.set(0); // volta pra primeira página ao filtrar
+    this.findAll();
+  }
+
+  onNameChange(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.selectedName.set(value);
+    this.pageIndex.set(0);
+    this.findAll();
   }
 
   insert(product: ProductModel): void {
