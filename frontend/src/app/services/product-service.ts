@@ -27,6 +27,17 @@ export class ProductService {
     );
   }
 
+  findByPrice(
+    min: number,
+    max: number,
+    page: number,
+    size: number,
+  ): Observable<PageResponse<ProductModel>> {
+    return this.http.get<PageResponse<ProductModel>>(
+      `${this.url}/price?min=${min}&max=${max}&page=${page}&size=${size}`,
+    );
+  }
+
   insert(obj: ProductModel): Observable<ProductModel> {
     return this.http.post<ProductModel>(this.url, obj);
   }

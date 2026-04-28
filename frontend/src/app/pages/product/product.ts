@@ -11,6 +11,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSelectModule } from '@angular/material/select';
 import { CategoriesModel } from '../../models/CategoriesModel';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-product',
@@ -21,6 +23,8 @@ import { CategoriesModel } from '../../models/CategoriesModel';
     ScrollingModule,
     MatTabsModule,
     MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './product.html',
   styleUrl: './product.css',
@@ -39,6 +43,8 @@ export class Product {
   categories: CategoriesModel[] = [];
   selectedCategory = signal('');
   selectedName = signal('');
+  minPrice = signal<number | null>(null);
+  maxPrice = signal<number | null>(null);
 
   dataSource = new MatTableDataSource<ProductModel>();
 
@@ -53,6 +59,7 @@ export class Product {
 
   ngOnInit(): void {
     this.findAll();
+    this.findAllCategories();
   }
 
   openDialog() {
@@ -67,13 +74,6 @@ export class Product {
     });
   }
 
-  // findAll(): void {
-  //   this.productService.findAll(this.pageIndex(), this.pageSize()).subscribe((res) => {
-  //     this.products.set(res.content);
-  //     this.totalElements.set(res.totalElements);
-  //   });
-  // }
-
   findAllCategories(): void {
     this.categoryService.findAll().subscribe((res) => (this.categories = res));
   }
@@ -87,9 +87,34 @@ export class Product {
       });
   }
 
+  onPriceFilter(): void {
+    const min = this.minPrice();
+    const max = this.maxPrice();
+
+    if (min === null || max === null) return;
+    if (min > max) {
+      alert('Preço mínimo não pode ser maior que o máximo!');
+      return;
+    }
+
+    this.pageIndex.set(0);
+    this.productService
+      .findByPrice(min, max, this.pageIndex(), this.pageSize())
+      .subscribe((res) => {
+        this.products.set(res.content);
+        this.totalElements.set(res.totalElements);
+      });
+  }
+
+  onPriceClear(): void {
+    this.minPrice.set(null);
+    this.maxPrice.set(null);
+    this.findAll(); // volta ao findAll sem filtro
+  }
+
   onCategoryChange(categoryName: string): void {
     this.selectedCategory.set(categoryName);
-    this.pageIndex.set(0); // volta pra primeira página ao filtrar
+    this.pageIndex.set(0);
     this.findAll();
   }
 

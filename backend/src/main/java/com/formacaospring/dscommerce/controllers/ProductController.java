@@ -49,18 +49,15 @@ public class ProductController {
         return ResponseEntity.ok().body(list);
 	}
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'USER_STOCK', 'SELLER')")
     @GetMapping("/price")
     public ResponseEntity<Page<ProductDTO>> findByMinAndMaxPrice(@RequestParam(defaultValue = "") String min,
                                                                  @RequestParam(defaultValue = "") String max,
                                                                  Pageable pageable){
-        if("".equals(min)){
-            min = "0";
-
-        } else if ("".equals(max)) {
-            max = "0";
-        }
-
+        
+                                                                    if("".equals(min))min = "0";
+                                                                    if ("".equals(max)) max = "0";
+        
         Page<ProductDTO> dto = service.findByMinAndMaxPrice(min, max, pageable);
         return ResponseEntity.ok(dto);
     }
