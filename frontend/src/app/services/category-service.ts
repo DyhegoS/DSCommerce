@@ -11,6 +11,22 @@ export class CategoryService {
 
   constructor(private http: HttpClient) {}
 
+  findById(id: number): Observable<CategoriesModel> {
+    return this.http.get<CategoriesModel>(`${this.url}/${id}`);
+  }
+
+  insert(obj: CategoriesModel): Observable<CategoriesModel> {
+    return this.http.post<CategoriesModel>(this.url, obj);
+  }
+
+  update(id: number, obj: CategoriesModel): Observable<CategoriesModel> {
+    return this.http.put<CategoriesModel>(`${this.url}/${id}`, obj);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
   findAll(): Observable<CategoriesModel[]> {
     return this.http.get<CategoriesModel[]>(this.url);
   }

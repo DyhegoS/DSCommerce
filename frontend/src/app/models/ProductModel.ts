@@ -7,5 +7,5 @@ export class ProductModel {
   price?: number;
   quantity?: number;
   imgUrl?: string;
-  // categories?: CategoriesModel[];
+  categories?: CategoriesModel[];
 }

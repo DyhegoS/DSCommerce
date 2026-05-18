@@ -1,0 +1,44 @@
+<h2>Orders</h2>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let order">{{ order.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="moment">
+    <th mat-header-cell *matHeaderCellDef>Moment</th>
+    <td mat-cell *matCellDef="let order">{{ order.moment }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let order">{{ order.status }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="user">
+    <th mat-header-cell *matHeaderCellDef>User</th>
+    <td mat-cell *matCellDef="let order">{{ order.user?.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="client">
+    <th mat-header-cell *matHeaderCellDef>Client</th>
+    <td mat-cell *matCellDef="let order">{{ order.client?.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="paymentStatus">
+    <th mat-header-cell *matHeaderCellDef>Pagamento</th>
+    <td mat-cell *matCellDef="let order">{{ order.payment?.status }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>
+
+<mat-paginator
+  [length]="totalElements()"
+  [pageSize]="pageSize()"
+  [pageSizeOptions]="[5, 10, 25]"
+  (page)="onPageChange($event)"
+>
+</mat-paginator>

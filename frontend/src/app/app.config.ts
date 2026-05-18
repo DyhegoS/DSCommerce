@@ -4,14 +4,10 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import {
-  provideHttpClient,
-  withInterceptors,
-  HTTP_INTERCEPTORS,
-  withFetch,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 
 import { routes } from './app.routes';
+import { authInterceptor } from './interceptors/auth-interceptor';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
 function customPaginatorIntl() {
@@ -33,7 +29,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([]), withFetch()),
+    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: MatPaginatorIntl, useFactory: customPaginatorIntl },
   ],

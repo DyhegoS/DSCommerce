@@ -1,0 +1,15 @@
+/* Client page styles */
+.header-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.table-container {
+  width: 100%;
+}

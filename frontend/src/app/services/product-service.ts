@@ -38,7 +38,19 @@ export class ProductService {
     );
   }
 
+  findById(id: number): Observable<ProductModel> {
+    return this.http.get<ProductModel>(`${this.url}/${id}`);
+  }
+
   insert(obj: ProductModel): Observable<ProductModel> {
     return this.http.post<ProductModel>(this.url, obj);
+  }
+
+  update(id: number, obj: ProductModel): Observable<ProductModel> {
+    return this.http.put<ProductModel>(`${this.url}/${id}`, obj);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${id}`);
   }
 }

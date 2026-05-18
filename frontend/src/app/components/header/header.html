@@ -1,7 +1,8 @@
 <mat-toolbar>
   <span>Sistema de Gestão de Produtos e Pedidos</span>
-
-  <button matButton>
-    <mat-icon aria-hidden="false" aria-label="User" fontIcon="account_circle"></mat-icon>
+  <span class="spacer"></span>
+  <button mat-button (click)="logout()">
+    <mat-icon aria-hidden="false" aria-label="Logout">logout</mat-icon>
+    Sair
   </button>
 </mat-toolbar>
